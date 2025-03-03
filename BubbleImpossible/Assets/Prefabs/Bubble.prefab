@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1191791141009023891}
   m_Layer: 0
   m_Name: Bubble
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -176,4 +176,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  delay: 0.5
   hitSprite: {fileID: 21300000, guid: 2c802c007e930854392e0616a93c7d6b, type: 3}

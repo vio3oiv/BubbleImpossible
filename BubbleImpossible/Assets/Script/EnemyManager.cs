@@ -1,30 +1,48 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class EnemyManager : MonoBehaviour
 {
-    public List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy> enemies = new List<Enemy>(); // 모든 적을 리스트로 관리
+    public GameObject explosionPrefab; // 폭발 효과 프리팹
 
-    void Start()
+    void Update()
     {
-        
-        enemies.Add(new Enemy("Bird", 2, 3, 3f, "-", "-"));
-        enemies.Add(new Enemy("FatBird", 4, 5, 5f, "-", "-"));
-        enemies.Add(new Enemy("HomingBird", 2, 2, 4f, "-", "-"));
-        enemies.Add(new Enemy("SpecialBird", 3, 3, 2f, "맵 오른쪽 끝에 고정된 상태에서 발사체 발사", "speed: 1/s time: 3"));
-        enemies.Add(new Enemy("SpeedBird", 2, 2, 2f, "-", "-"));
-        enemies.Add(new Enemy("FatBirdEX", 5, 5, 5f, "-", "-"));
-
-        
-        PrintEnemyList();
+        for (int i = enemies.Count - 1; i >= 0; i--)
+        {
+            if (enemies[i] != null && enemies[i].hp <= 0)
+            {
+                StartCoroutine(DestroyEnemyWithDelay(enemies[i]));
+            }
+        }
     }
 
-   
-    void PrintEnemyList()
+    public void RegisterEnemy(Enemy enemy)
     {
-        foreach (Enemy enemy in enemies)
+        enemies.Add(enemy);
+    }
+
+    public IEnumerator DestroyEnemyWithDelay(Enemy enemy)
+    {
+        if (enemy == null) yield break; // 적이 이미 삭제되었으면 중단
+
+        Animator animator = enemy.GetComponent<Animator>();
+        if (animator != null)
         {
-            Debug.Log($"이름: {enemy.name}, HP: {enemy.hp}, 속도: {enemy.speed}, 특수공격: {enemy.specialAttack}");
+            animator.SetTrigger("OnDeath"); // 사망 애니메이션 실행
         }
+
+        yield return new WaitForSeconds(1f); // 1초 대기
+
+        if (enemy == null) yield break; // 적이 삭제되었으면 중단
+
+        if (explosionPrefab != null)
+        {
+            Instantiate(explosionPrefab, enemy.transform.position, Quaternion.identity);
+        }
+
+        enemies.Remove(enemy);
+        Destroy(enemy.gameObject);
     }
 }

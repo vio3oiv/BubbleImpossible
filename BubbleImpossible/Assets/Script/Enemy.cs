@@ -1,22 +1,85 @@
 using UnityEngine;
+using System.Collections;
 
-[System.Serializable]
-public class Enemy
+public class Enemy : MonoBehaviour
 {
-    public string name;      // 적 이름
-    public int hp;          // 체력
-    public int hp0;         // HP가 0이 되었을 때 표시
-    public float speed;     // 속도
-    public string specialAttack; // 특수 공격 설명
-    public string notes;    // 비고
+    public int hp = 2;
+    public float speed = 2f;
+    public string enemyName;
+    private Transform player;
+    private Animator animator;
+    private bool hasPassedPlayer = false;
+    private bool isDying = false; // 적이 죽는 중인지 체크
 
-    public Enemy(string name, int hp, int hp0, float speed, string specialAttack, string notes)
+    void Start()
     {
-        this.name = name;
-        this.hp = hp;
-        this.hp0 = hp0;
-        this.speed = speed;
-        this.specialAttack = specialAttack;
-        this.notes = notes;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        animator = GetComponent<Animator>();
+
+        FindFirstObjectByType<EnemyManager>()?.RegisterEnemy(this);
+    }
+
+    void Update()
+    {
+        if (!isDying) // 사망 중이 아닐 때만 이동
+        {
+            if (enemyName == "HomingBird" && player != null && !hasPassedPlayer)
+            {
+                if (transform.position.x > player.position.x)
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+                }
+                else
+                {
+                    hasPassedPlayer = true;
+                }
+            }
+            else
+            {
+                transform.position += Vector3.left * speed * Time.deltaTime;
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Bullet"))
+        {
+            hp -= 1;
+
+            if (hp <= 0 && !isDying)
+            {
+                isDying = true; // 사망 중 플래그 설정
+                animator.SetTrigger("OnDeath");
+
+                EnemyManager enemyManager = FindFirstObjectByType<EnemyManager>();
+                if (enemyManager != null)
+                {
+                    StartCoroutine(FlyUpAndDestroy(enemyManager));
+                }
+            }
+        }
+    }
+
+    private IEnumerator FlyUpAndDestroy(EnemyManager enemyManager)
+    {
+        float flySpeed = 2f;
+        float duration = 1f; // 1초 동안 떠오름
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            transform.position += Vector3.up * flySpeed * Time.deltaTime;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        if (enemyManager.explosionPrefab != null)
+        {
+            Instantiate(enemyManager.explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        enemyManager.enemies.Remove(this);
+        Destroy(gameObject);
     }
 }

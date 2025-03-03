@@ -2,6 +2,7 @@
 
 public class Player : MonoBehaviour
 {
+    public int hp = 3; // 플레이어 HP (기본값 3)
     public float speed = 5f; // 이동 속도
     private Rigidbody2D rb;
     private Animator animator;
@@ -12,19 +13,28 @@ public class Player : MonoBehaviour
     public Collider2D moveBounds; // 이동을 제한할 콜라이더
     private bool canShoot = true; // 발사 가능 여부
 
+    private SpriteRenderer spriteRenderer;
+    public Sprite hitSprite; // 피격 시 변경할 스프라이트
+    public Sprite deathSprite; // 사망 시 변경할 스프라이트
+    private Sprite defaultSprite; // 기본 스프라이트 저장
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // firePoint가 설정되지 않았다면 경고 출력
+        if (spriteRenderer != null)
+        {
+            defaultSprite = spriteRenderer.sprite; // 기본 스프라이트 저장
+        }
+
         if (firePoint == null)
         {
             Debug.LogError("🚨 firePoint가 설정되지 않았습니다! Unity 인스펙터에서 firePoint를 할당하세요.");
         }
 
-        // 시작 시 Idle 애니메이션 실행
-        animator.Play("PlayerIdle");
+        animator.Play("PlayerIdle"); // 시작 시 Idle 애니메이션 실행
     }
 
     void Update()
@@ -34,11 +44,9 @@ public class Player : MonoBehaviour
 
         movement = new Vector2(moveX, moveY).normalized;
 
-        // 이동 애니메이션 설정
         bool isMoving = movement != Vector2.zero;
         animator.SetBool("isMoving", isMoving);
 
-        // Z키를 누르면 발사
         if (Input.GetKeyDown(KeyCode.Z) && canShoot)
         {
             Shoot();
@@ -47,7 +55,6 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        // 이동 제한이 설정되어 있을 때 위치 보정
         if (moveBounds != null)
         {
             Vector2 newPosition = rb.position;
@@ -57,7 +64,6 @@ public class Player : MonoBehaviour
             rb.position = newPosition;
         }
 
-        // Rigidbody2D의 linearVelocity를 사용한 이동 처리
         rb.linearVelocity = movement * speed;
     }
 
@@ -69,16 +75,10 @@ public class Player : MonoBehaviour
             return;
         }
 
-        // 발사 애니메이션 실행
         animator.SetTrigger("shootTrigger");
-
-        // 탄 생성
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-        // 일정 시간 후 다시 Idle 상태로 전환
         Invoke(nameof(ResetToIdle), shootCooldown);
-
-        // 쿨타임 적용
         canShoot = false;
         Invoke(nameof(ResetShoot), shootCooldown);
     }
@@ -90,7 +90,44 @@ public class Player : MonoBehaviour
 
     void ResetToIdle()
     {
-        // 발사 후 다시 Idle 상태로 변경
         animator.Play("PlayerIdle");
+    }
+
+    public void TakeDamage(int damage)
+    {
+        hp -= damage;
+        Debug.Log($"🚨 플레이어 HP 감소: {damage}, 남은 HP: {hp}");
+
+        if (hp > 0)
+        {
+            if (hitSprite != null)
+            {
+                spriteRenderer.sprite = hitSprite;
+                Invoke(nameof(ResetSprite), 0.5f);
+            }
+        }
+        else
+        {
+            if (deathSprite != null)
+            {
+                spriteRenderer.sprite = deathSprite;
+                animator.enabled = false; // 애니메이션 중지
+                Debug.Log("💀 플레이어 사망!");
+            }
+        }
+    }
+
+    void ResetSprite()
+    {
+        spriteRenderer.sprite = defaultSprite;
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            Debug.Log($"⚠️ {collision.gameObject.name} (적)과 충돌함!");
+            TakeDamage(1);
+        }
     }
 }
