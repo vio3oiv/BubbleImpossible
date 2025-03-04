@@ -1,22 +1,23 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    public int hp = 3; // 플레이어 HP (기본값 3)
+    public int hp = 3; // 플레이어 HP
     public float speed = 5f; // 이동 속도
     private Rigidbody2D rb;
     private Animator animator;
     private Vector2 movement;
-    public GameObject bulletPrefab; // 탄알 프리팹
-    public Transform firePoint; // 탄이 발사될 위치
-    public float shootCooldown = 0.2f; // 발사 후 쿨타임
-    public Collider2D moveBounds; // 이동을 제한할 콜라이더
-    private bool canShoot = true; // 발사 가능 여부
+    public GameObject bulletPrefab;
+    public Transform firePoint;
+    public float shootCooldown = 0.2f;
+    public Collider2D moveBounds;
+    private bool canShoot = true;
+    private bool isDead = false;
 
     private SpriteRenderer spriteRenderer;
-    public Sprite hitSprite; // 피격 시 변경할 스프라이트
     public Sprite deathSprite; // 사망 시 변경할 스프라이트
-    private Sprite defaultSprite; // 기본 스프라이트 저장
+    private Sprite defaultSprite;
 
     void Start()
     {
@@ -26,12 +27,7 @@ public class Player : MonoBehaviour
 
         if (spriteRenderer != null)
         {
-            defaultSprite = spriteRenderer.sprite; // 기본 스프라이트 저장
-        }
-
-        if (firePoint == null)
-        {
-            Debug.LogError("🚨 firePoint가 설정되지 않았습니다! Unity 인스펙터에서 firePoint를 할당하세요.");
+            defaultSprite = spriteRenderer.sprite;
         }
 
         animator.Play("PlayerIdle"); // 시작 시 Idle 애니메이션 실행
@@ -39,6 +35,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return; // 사망 시 조작 불가
+
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
@@ -55,6 +53,8 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return; // 사망 시 이동 불가
+
         if (moveBounds != null)
         {
             Vector2 newPosition = rb.position;
@@ -95,38 +95,41 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isDead) return;
+
         hp -= damage;
         Debug.Log($"🚨 플레이어 HP 감소: {damage}, 남은 HP: {hp}");
 
-        if (hp > 0)
+        if (hp <= 0)
         {
-            if (hitSprite != null)
-            {
-                spriteRenderer.sprite = hitSprite;
-                Invoke(nameof(ResetSprite), 0.5f);
-            }
-        }
-        else
-        {
-            if (deathSprite != null)
-            {
-                spriteRenderer.sprite = deathSprite;
-                animator.enabled = false; // 애니메이션 중지
-                Debug.Log("💀 플레이어 사망!");
-            }
+            StartCoroutine(Die()); // 사망 루틴 실행
         }
     }
 
-    void ResetSprite()
+    IEnumerator Die()
     {
-        spriteRenderer.sprite = defaultSprite;
+        isDead = true;
+        animator.enabled = false; // 애니메이션 정지
+
+        if (deathSprite != null)
+        {
+            spriteRenderer.sprite = deathSprite;
+        }
+
+        Debug.Log("💀 플레이어 사망! 아래로 떨어짐");
+
+        rb.gravityScale = 1f; // 중력 적용하여 아래로 떨어지도록 설정
+        rb.linearVelocity = new Vector2(0, -5f); // 아래 방향으로 이동
+
+        yield return new WaitForSeconds(3f); // 3초 대기
+
+        GameManager.instance.GameOver(); // 3초 후 게임 오버 화면 표시
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
         {
-            Debug.Log($"⚠️ {collision.gameObject.name} (적)과 충돌함!");
             TakeDamage(1);
         }
     }

@@ -3,43 +3,99 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public int hp = 2;
-    public float speed = 2f;
-    public string enemyName;
+    public int hp = 2; // ï¿½ï¿½ Ã¼ï¿½ï¿½
+    public float speed = 2f; // ï¿½Ï¹ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½
+    public string enemyName; // ï¿½ï¿½ ï¿½Ì¸ï¿½ (Æ¯ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     private Transform player;
     private Animator animator;
     private bool hasPassedPlayer = false;
-    private bool isDying = false; // ÀûÀÌ Á×´Â ÁßÀÎÁö Ã¼Å©
+    private bool isDying = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
+
+    // SpecialBird ï¿½ï¿½ï¿½ï¿½
+    public bool isSpecialBird = false; // SpecialBirdï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+    public Vector2 targetPosition; // SpecialBirdï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡
+    private bool hasReachedTarget = false; // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public GameObject bulletPrefab; // SpecialBirdï¿½ï¿½ Åº ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Transform firePoint; // Åº ï¿½ß»ï¿½ ï¿½ï¿½Ä¡
+    public float bulletSpeed = 7f; // Åº ï¿½Óµï¿½
+    public float fireRate = 3f; // Åº ï¿½ß»ï¿½ ï¿½Ö±ï¿½
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         animator = GetComponent<Animator>();
 
+        // SpecialBirdï¿½Ì¸ï¿½ Åº ï¿½ß»ï¿½ ï¿½ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
+        if (isSpecialBird)
+        {
+            StartCoroutine(FireRoutine());
+        }
+
         FindFirstObjectByType<EnemyManager>()?.RegisterEnemy(this);
     }
 
     void Update()
     {
-        if (!isDying) // »ç¸Á ÁßÀÌ ¾Æ´Ò ¶§¸¸ ÀÌµ¿
+        if (!isDying)
         {
-            if (enemyName == "HomingBird" && player != null && !hasPassedPlayer)
+            if (isSpecialBird)
             {
-                if (transform.position.x > player.position.x)
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-                }
-                else
-                {
-                    hasPassedPlayer = true;
-                }
+                MoveToTarget();
             }
             else
             {
-                transform.position += Vector3.left * speed * Time.deltaTime;
+                MoveLeft();
             }
         }
     }
+
+    void MoveLeft()
+    {
+        transform.position += Vector3.left * speed * Time.deltaTime;
+    }
+
+    void MoveToTarget()
+    {
+        if (!hasReachedTarget)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+            if (Vector2.Distance(transform.position, targetPosition) < 0.1f)
+            {
+                hasReachedTarget = true;
+            }
+        }
+    }
+
+    IEnumerator FireRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(fireRate);
+            Fire();
+        }
+    }
+
+    void Fire()
+    {
+        if (bulletPrefab != null && firePoint != null)
+        {
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+            Bullet bulletScript = bullet.GetComponent<Bullet>();
+
+            if (bulletScript != null)
+            {
+                bulletScript.isEnemyBullet = true; // ğŸŸ¢ SpecialBirdì˜ íƒ„ìœ¼ë¡œ ì„¤ì •
+            }
+
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.left * bulletSpeed; // íƒ„ì„ ì™¼ìª½ìœ¼ë¡œ ë°œì‚¬
+            }
+        }
+    }
+
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -49,7 +105,7 @@ public class Enemy : MonoBehaviour
 
             if (hp <= 0 && !isDying)
             {
-                isDying = true; // »ç¸Á Áß ÇÃ·¡±× ¼³Á¤
+                isDying = true; 
                 animator.SetTrigger("OnDeath");
 
                 EnemyManager enemyManager = FindFirstObjectByType<EnemyManager>();
@@ -64,7 +120,7 @@ public class Enemy : MonoBehaviour
     private IEnumerator FlyUpAndDestroy(EnemyManager enemyManager)
     {
         float flySpeed = 2f;
-        float duration = 1f; // 1ÃÊ µ¿¾È ¶°¿À¸§
+        float duration = 1f; 
         float timer = 0f;
 
         while (timer < duration)

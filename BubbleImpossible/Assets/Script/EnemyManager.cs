@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class EnemyManager : MonoBehaviour
 {
-    public List<Enemy> enemies = new List<Enemy>(); // ¸ğµç ÀûÀ» ¸®½ºÆ®·Î °ü¸®
-    public GameObject explosionPrefab; // Æø¹ß È¿°ú ÇÁ¸®ÆÕ
+    public List<Enemy> enemies = new List<Enemy>(); // ì  ë¦¬ìŠ¤íŠ¸
+    public GameObject explosionPrefab; // í­ë°œ íš¨ê³¼ í”„ë¦¬íŒ¹
 
     void Update()
     {
@@ -16,6 +16,14 @@ public class EnemyManager : MonoBehaviour
                 StartCoroutine(DestroyEnemyWithDelay(enemies[i]));
             }
         }
+
+        enemies.RemoveAll(e => e == null);
+
+        if (enemies.Count == 0)
+        {
+            Debug.Log("âœ… ëª¨ë“  ì ì´ ì œê±°ë¨, ë‹¤ìŒ íŒ¨í„´ ì‹¤í–‰");
+            FindFirstObjectByType<PatternManager>()?.NextPattern();
+        }
     }
 
     public void RegisterEnemy(Enemy enemy)
@@ -25,17 +33,17 @@ public class EnemyManager : MonoBehaviour
 
     public IEnumerator DestroyEnemyWithDelay(Enemy enemy)
     {
-        if (enemy == null) yield break; // ÀûÀÌ ÀÌ¹Ì »èÁ¦µÇ¾úÀ¸¸é Áß´Ü
+        if (enemy == null) yield break; // ì ì´ ì´ë¯¸ ì‚­ì œë˜ì—ˆìœ¼ë©´ ì¤‘ë‹¨
 
         Animator animator = enemy.GetComponent<Animator>();
         if (animator != null)
         {
-            animator.SetTrigger("OnDeath"); // »ç¸Á ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà
+            animator.SetTrigger("OnDeath"); // ì‚¬ë§ ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
         }
 
-        yield return new WaitForSeconds(1f); // 1ÃÊ ´ë±â
+        yield return new WaitForSeconds(1f); // 1ì´ˆ ëŒ€ê¸° (ì‚¬ë§ ì• ë‹ˆë©”ì´ì…˜ ìœ ì§€)
 
-        if (enemy == null) yield break; // ÀûÀÌ »èÁ¦µÇ¾úÀ¸¸é Áß´Ü
+        if (enemy == null) yield break; // ì ì´ ì‚­ì œë˜ì—ˆìœ¼ë©´ ì¤‘ë‹¨
 
         if (explosionPrefab != null)
         {

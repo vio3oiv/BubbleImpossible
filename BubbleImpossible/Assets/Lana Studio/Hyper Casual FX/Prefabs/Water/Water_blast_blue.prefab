@@ -9745,6 +9745,7 @@ GameObject:
   - component: {fileID: 83557698195126688}
   - component: {fileID: 3655534939648197250}
   - component: {fileID: 5704433433843175113}
+  - component: {fileID: 5669760829800700471}
   m_Layer: 0
   m_Name: Water_blast_blue
   m_TagString: Untagged
@@ -14649,6 +14650,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5669760829800700471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3223031359271505891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 398d89c711bc51d4193391f135f32a6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyDelay: 1
 --- !u!1 &6800941012966364305
 GameObject:
   m_ObjectHideFlags: 0
