@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2342066057726030882}
   - component: {fileID: 8273983792538134126}
   - component: {fileID: 6535801540550084815}
-  - component: {fileID: 1191791141009023891}
+  - component: {fileID: 2454465722345688802}
   m_Layer: 0
   m_Name: Bubble
   m_TagString: Bullet
@@ -163,7 +163,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.77, y: 0.85}
   m_EdgeRadius: 0
---- !u!114 &1191791141009023891
+--- !u!114 &2454465722345688802
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,5 +176,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  delay: 0.5
+  delay: 0.1
   hitSprite: {fileID: 21300000, guid: 2c802c007e930854392e0616a93c7d6b, type: 3}

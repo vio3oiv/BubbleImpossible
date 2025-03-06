@@ -2,38 +2,32 @@
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 7f; // 탄 속도
-    public int damage = 1; // 기본 피해량
-    public bool isEnemyBullet = false; // 🟢 적(특히 SpecialBird)의 탄인지 확인
+    public float speed = 10f; // 탄 속도
+    public float delay = 0.1f; // 적과 충돌 후 삭제까지의 지연 시간
+    public Sprite hitSprite; // 적과 충돌 시 변경할 스프라이트
+
+    private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
+    private bool hasHit = false;
 
     void Start()
     {
-        GetComponent<Rigidbody2D>().linearVelocity = Vector2.left * speed; // 탄을 왼쪽으로 발사
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb.freezeRotation = true;
+        rb.linearVelocity = new Vector2(speed, 0f); // 오른쪽으로 이동
+
+        // 🟢 Update에서 직접 transform.position을 변경하지 않음 (Rigidbody2D 사용)
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isEnemyBullet && collision.CompareTag("Enemy")) // 플레이어 탄이 적을 맞춘 경우
+        if (!hasHit && collision.CompareTag("Enemy"))
         {
-            Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.hp -= damage;
-            }
-            Destroy(gameObject); // 탄 제거
-        }
-        else if (isEnemyBullet && collision.CompareTag("Player")) // SpecialBird의 탄이 플레이어를 맞춘 경우
-        {
-            Player player = collision.GetComponent<Player>();
-            if (player != null)
-            {
-                player.TakeDamage(damage); // 플레이어 HP 감소
-            }
-            Destroy(gameObject); // 탄 제거
-        }
-        else if (collision.CompareTag("Wall")) // 벽과 충돌 시 삭제
-        {
-            Destroy(gameObject);
+            hasHit = true;
+            spriteRenderer.sprite = hitSprite; // 스프라이트 변경
+            rb.linearVelocity = Vector2.zero; // 속도 정지
+            Destroy(gameObject, delay); // 지정된 시간 후 삭제
         }
     }
 }

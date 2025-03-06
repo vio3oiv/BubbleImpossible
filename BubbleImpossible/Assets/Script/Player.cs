@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    public int hp = 3; // 플레이어 HP
-    public float speed = 5f; // 이동 속도
+    public int hp = 3;
+    public float speed = 5f;
     private Rigidbody2D rb;
     private Animator animator;
     private Vector2 movement;
@@ -14,32 +14,22 @@ public class Player : MonoBehaviour
     public Collider2D moveBounds;
     private bool canShoot = true;
     private bool isDead = false;
-
-    private SpriteRenderer spriteRenderer;
-    public Sprite deathSprite; // 사망 시 변경할 스프라이트
-    private Sprite defaultSprite;
+    public GameObject[] balloonSprites; 
+    public GameObject balloonPopEffectPrefab; 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        if (spriteRenderer != null)
-        {
-            defaultSprite = spriteRenderer.sprite;
-        }
-
-        animator.Play("PlayerIdle"); // 시작 시 Idle 애니메이션 실행
+        animator.Play("PlayerIdle");
     }
 
     void Update()
     {
-        if (isDead) return; // 사망 시 조작 불가
+        if (isDead) return;
 
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
-
         movement = new Vector2(moveX, moveY).normalized;
 
         bool isMoving = movement != Vector2.zero;
@@ -53,7 +43,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDead) return; // 사망 시 이동 불가
+        if (isDead) return;
 
         if (moveBounds != null)
         {
@@ -71,10 +61,9 @@ public class Player : MonoBehaviour
     {
         if (firePoint == null)
         {
-            Debug.LogError("🚨 firePoint가 설정되지 않았습니다! 탄을 발사할 수 없습니다.");
+            Debug.LogError("🚨 firePoint가 설정되지 않았습니다!");
             return;
         }
-
         animator.SetTrigger("shootTrigger");
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
@@ -98,32 +87,65 @@ public class Player : MonoBehaviour
         if (isDead) return;
 
         hp -= damage;
-        Debug.Log($"🚨 플레이어 HP 감소: {damage}, 남은 HP: {hp}");
+        Debug.Log($"🚨 플레이어 HP: {hp}");
+
+        // Animator에서 "PlayerHit" 상태로 전환 (트리거)
+        animator.SetTrigger("HitTrigger");
+        PopBalloon();
 
         if (hp <= 0)
         {
-            StartCoroutine(Die()); // 사망 루틴 실행
+            // 사망 트리거
+            animator.SetTrigger("DeathTrigger");
+            // 사망 코루틴 직접 호출 (or Animation Event에서 호출 가능)
+            StartCoroutine(Die());
+        }
+    }
+    void PopBalloon()
+    {
+        // HP가 0 이하이면 더 이상 풍선이 없음
+        if (hp < 0) return;
+
+        // balloonSprites 배열에서 인덱스 = 현재 HP
+        // 예) HP가 3 -> 2로 줄면 balloonSprites[2]를 제거
+        // (배열 인덱스와 HP를 일치시키려면 배열 크기와 HP 최대치가 동일해야 함)
+
+        if (hp < balloonSprites.Length)
+        {
+            GameObject balloon = balloonSprites[hp];
+            if (balloon != null)
+            {
+                // 풍선 위치에서 폭발 이펙트 생성
+                if (balloonPopEffectPrefab != null)
+                {
+                    Instantiate(balloonPopEffectPrefab, balloon.transform.position, Quaternion.identity);
+                }
+                // 풍선 제거
+                Destroy(balloon);
+
+                // 배열에서 참조도 없애서 중복 제거 방지
+                balloonSprites[hp] = null;
+            }
         }
     }
 
     IEnumerator Die()
     {
         isDead = true;
-        animator.enabled = false; // 애니메이션 정지
-
-        if (deathSprite != null)
-        {
-            spriteRenderer.sprite = deathSprite;
-        }
 
         Debug.Log("💀 플레이어 사망! 아래로 떨어짐");
 
-        rb.gravityScale = 1f; // 중력 적용하여 아래로 떨어지도록 설정
-        rb.linearVelocity = new Vector2(0, -5f); // 아래 방향으로 이동
+        // 여기서 'Death' 애니메이션 재생은 Animator가 Trigger를 이용해 자동 전환
+        // animator.Play("PlayerDeath");  // 필요하다면 직접 호출도 가능
 
-        yield return new WaitForSeconds(3f); // 3초 대기
+        // 중력 적용 후 아래로 떨어지는 연출
+        rb.gravityScale = 1f;
+        rb.linearVelocity = new Vector2(0, -5f);
 
-        GameManager.instance.GameOver(); // 3초 후 게임 오버 화면 표시
+        yield return new WaitForSeconds(3f);
+
+        // 3초 후 게임 오버
+        GameManager.instance.GameOver();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
