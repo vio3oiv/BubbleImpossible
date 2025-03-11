@@ -1568,7 +1568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 3
-  speed: 5
+  speed: 6
   bulletPrefab: {fileID: 6042492230782537992, guid: ac6ca5ae086bc3a4e8ad797426f06acb, type: 3}
   firePoint: {fileID: 833194380}
   shootCooldown: 0.5
@@ -1653,7 +1653,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.29181123, y: 0}
+  m_Offset: {x: -0.3350904, y: -0.0061826706}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1663,7 +1663,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4.4163775, y: 3.5}
+  m_Size: {x: 4.131979, y: 3.1414099}
   m_EdgeRadius: 0
 --- !u!1 &1365988741
 GameObject:
