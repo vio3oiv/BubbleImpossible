@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("💀 게임 종료! 3초 후 Game Over UI 표시");
 
         // 3초 후 UI 표시
-        Invoke(nameof(ShowGameOverUI), 3f);
+        Invoke(nameof(ShowGameOverUI), 1f);
     }
 
     void ShowGameOverUI()

@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public string enemyName; // 적 이름 (특수 적 구분)
     private Transform player;
     private Animator animator;
-    private bool hasPassedPlayer = false;
+    //private bool hasPassedPlayer = false;
     private bool isDying = false; // 사망 여부
 
     // SpecialBird 관련 변수
@@ -79,48 +79,49 @@ public class Enemy : MonoBehaviour
 
 
     void Fire()
-{
-    if (specialBulletPrefab == null)
     {
-        Debug.LogError("🚨 SpecialBird의 탄 프리팹이 설정되지 않았습니다!");
-        return;
+        if (specialBulletPrefab == null)
+        {
+            Debug.LogError("🚨 SpecialBird의 탄 프리팹이 설정되지 않았습니다!");
+            return;
+        }
+
+        if (firePoint == null)
+        {
+            Debug.LogError("🚨 SpecialBird의 firePoint가 설정되지 않았습니다!");
+            return;
+        }
+
+        GameObject bullet = Instantiate(specialBulletPrefab, firePoint.position, Quaternion.identity);
+
+        if (bullet == null)
+        {
+            Debug.LogError("🚨 SpecialBird 탄이 생성되지 않았습니다!");
+            return;
+        }
+
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+        if (rb == null)
+        {
+            Debug.LogError("🚨 SpecialBird 탄에 Rigidbody2D가 없습니다!");
+            return;
+        }
+
+        rb.linearVelocity = Vector2.left * bulletSpeed; // 탄을 왼쪽으로 발사
+        Debug.Log($"🚀 SpecialBird가 탄을 발사했습니다! 속도: {rb.linearVelocity}");
     }
-
-    if (firePoint == null)
-    {
-        Debug.LogError("🚨 SpecialBird의 firePoint가 설정되지 않았습니다!");
-        return;
-    }
-
-    GameObject bullet = Instantiate(specialBulletPrefab, firePoint.position, Quaternion.identity);
-    
-    if (bullet == null)
-    {
-        Debug.LogError("🚨 SpecialBird 탄이 생성되지 않았습니다!");
-        return;
-    }
-
-    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-
-    if (rb == null)
-    {
-        Debug.LogError("🚨 SpecialBird 탄에 Rigidbody2D가 없습니다!");
-        return;
-    }
-
-    rb.linearVelocity = Vector2.left * bulletSpeed; // 탄을 왼쪽으로 발사
-    Debug.Log($"🚀 SpecialBird가 탄을 발사했습니다! 속도: {rb.linearVelocity}");
-}
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Bullet")) // 플레이어의 탄이 적을 맞춘 경우
+        // 플레이어 탄과 충돌 → 적 HP 감소
+        if (collision.CompareTag("Bullet"))
         {
             hp -= 1;
 
             if (hp <= 0 && !isDying)
             {
-                isDying = true; // 사망 플래그 설정
+                isDying = true;
                 animator.SetTrigger("OnDeath");
 
                 EnemyManager enemyManager = FindFirstObjectByType<EnemyManager>();
@@ -129,9 +130,29 @@ public class Enemy : MonoBehaviour
                     StartCoroutine(FlyUpAndDestroy(enemyManager));
                 }
             }
-            Destroy(collision.gameObject); // 맞은 탄 제거
+            Destroy(collision.gameObject);
+        }
+        // 플레이어와 충돌
+        else if (collision.CompareTag("Player"))
+        {
+            Player player = collision.GetComponent<Player>();
+            if (player != null)
+            {
+                // 에너미가 아직 사망 중이 아니면 → 플레이어 HP 감소
+                if (!isDying)
+                {
+                    player.TakeDamage(1);
+                }
+                else
+                {
+                    // 사망 애니메이션 중이라면 → 플레이어를 강제로 Idle 상태로 전환
+                    player.ForceIdle();
+                }
+            }
         }
     }
+
+
 
     private IEnumerator FlyUpAndDestroy(EnemyManager enemyManager)
     {

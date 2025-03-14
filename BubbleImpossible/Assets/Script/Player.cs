@@ -3,42 +3,44 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    public int hp = 3;          // 플레이어 HP
-    public float speed = 5f;    // 이동 속도
+    public int hp = 3;
+    public float speed = 5f;
     private bool isDead = false;
     private bool canShoot = true;
-    private bool isInvulnerable = false; // 1초 무적 상태 여부
+    private bool isInvulnerable = false;
 
     private Rigidbody2D rb;
     private Animator animator;
-    private SpriteRenderer spriteRenderer;
 
     public Transform firePoint;
     public GameObject bulletPrefab;
     public Collider2D moveBounds;
 
     public float shootCooldown = 0.2f;
-    public Sprite deathSprite;
-    public Sprite damageSprite;
+
+    [Header("풍선(HP) 관련")]
+    public GameObject[] balloonObjects;
+    public GameObject balloonPopEffect;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
 
+        // 시작 시 Idle 애니메이션
         animator.Play("PlayerIdle");
     }
 
     void Update()
     {
+        // 사망하면 조작 불가
         if (isDead) return;
 
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         Vector2 movement = new Vector2(moveX, moveY).normalized;
 
-        bool isMoving = movement != Vector2.zero;
+        bool isMoving = (movement != Vector2.zero);
         animator.SetBool("isMoving", isMoving);
 
         rb.linearVelocity = movement * speed;
@@ -77,23 +79,49 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        // 무적 상태라면 추가 데미지 무시
+        // 무적 상태면 피해 무시
         if (isInvulnerable) return;
 
         hp -= damage;
         Debug.Log($"🚨 플레이어 HP: {hp}");
 
-        // 1초 동안 무적
+        // 풍선(HP) 제거
+        PopBalloon();
+
+        // 1초 무적
         StartCoroutine(InvulnerabilityRoutine(1f));
 
-        // 피격 애니메이션 트리거
-        animator.SetTrigger("HitTrigger");
-
-        // HP가 0 이하 → 사망 로직
-        if (hp <= 0)
+        // HP가 0 초과일 때만 HitTrigger (중간 피격)
+        if (hp > 0)
         {
-            animator.SetTrigger("DeathTrigger");
+            animator.SetTrigger("HitTrigger");
+        }
+
+        // HP 0 이하 → 즉시 사망 애니메이션
+        if (hp <= 0 && !isDead)
+        {
+            isDead = true;
+            animator.SetTrigger("DeathTrigger"); // 사망 애니메이션 즉시 실행
+
+            // 사망 처리 코루틴
             StartCoroutine(Die());
+        }
+    }
+
+    void PopBalloon()
+    {
+        if (hp < 0) return;
+        if (hp >= balloonObjects.Length) return;
+
+        GameObject balloon = balloonObjects[hp];
+        if (balloon != null)
+        {
+            if (balloonPopEffect != null)
+            {
+                Instantiate(balloonPopEffect, balloon.transform.position, Quaternion.identity);
+            }
+            Destroy(balloon);
+            balloonObjects[hp] = null;
         }
     }
 
@@ -106,16 +134,17 @@ public class Player : MonoBehaviour
 
     IEnumerator Die()
     {
-        isDead = true;
+        Debug.Log("💀 플레이어 사망! 즉시 사망 애니메이션");
 
-        Debug.Log("💀 플레이어 사망! 아래로 떨어짐");
+        // 여기서 이동/조작을 막기 위해서 isDead = true;
+        // 사망 애니메이션 길이에 맞춰 잠깐 대기 (예: 1초)
+        yield return new WaitForSeconds(1f);
 
-        // 사망 시 연출 (애니메이션, 중력 등)
-        animator.enabled = false;
+        // 이후 아래로 떨어지는 연출을 할 수도 있고,
+        // 바로 GameOver 처리를 할 수도 있음
         rb.gravityScale = 1f;
         rb.linearVelocity = new Vector2(0, -5f);
 
-        yield return new WaitForSeconds(3f);
         GameManager.instance.GameOver();
     }
 
@@ -126,4 +155,12 @@ public class Player : MonoBehaviour
             TakeDamage(1);
         }
     }
+
+    public void ForceIdle()
+    {
+        // 플레이어를 강제로 Idle 애니메이션으로 전환
+        animator.Play("PlayerIdle");
+
+    }
+
 }
