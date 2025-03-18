@@ -973,7 +973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b839664b2a953f4d9c1d6731480c34f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 679042774}
+  scrollRenderer: {fileID: 0}
   speed: 0.1
 --- !u!1 &812258952
 GameObject:
@@ -1058,7 +1058,7 @@ Transform:
   m_GameObject: {fileID: 812258952}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.7, y: -0.967, z: -0.16958627}
+  m_LocalPosition: {x: -11.77, y: -0.967, z: -0.16958627}
   m_LocalScale: {x: 0.81008416, y: 32.56211, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1569,15 +1569,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 3
   speed: 6
-  bulletPrefab: {fileID: 6042492230782537992, guid: ac6ca5ae086bc3a4e8ad797426f06acb, type: 3}
   firePoint: {fileID: 833194380}
-  shootCooldown: 0.5
+  bulletPrefab: {fileID: 6042492230782537992, guid: ac6ca5ae086bc3a4e8ad797426f06acb, type: 3}
   moveBounds: {fileID: 1536219250}
-  balloonSprites:
+  shootCooldown: 0.5
+  balloonObjects:
   - {fileID: 171003129}
   - {fileID: 221535217}
   - {fileID: 617199806}
-  balloonPopEffectPrefab: {fileID: 4938095755617958529, guid: 2e79f16be10fbd14f8d5ef191f8db4aa, type: 3}
+  balloonPopEffect: {fileID: 4938095755617958529, guid: 2e79f16be10fbd14f8d5ef191f8db4aa, type: 3}
 --- !u!50 &1282045261
 Rigidbody2D:
   serializedVersion: 5
@@ -1859,7 +1859,7 @@ GameObject:
   - component: {fileID: 1536219250}
   m_Layer: 0
   m_Name: moveArea
-  m_TagString: Wall
+  m_TagString: Boundary
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1968,7 +1968,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.00005303137, y: -0.00011528749}
+  m_Offset: {x: -0.00007857778, y: -0.00011528749}
   m_SpriteTilingProperty:
     border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
     pivot: {x: 0.5, y: 0.5}
@@ -1978,7 +1978,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.009044565, y: 0.008456409}
+  m_Size: {x: 0.009307783, y: 0.008456409}
   m_EdgeRadius: 0
 --- !u!1 &1606959105
 GameObject:
