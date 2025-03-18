@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     private Transform player;
     private Animator animator;
     //private bool hasPassedPlayer = false;
-    private bool isDying = false; // 사망 여부
+    public bool isDying = false; // 사망 여부
 
     // SpecialBird 관련 변수
     public bool isSpecialBird = false; // SpecialBird인지 여부
@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     public Transform firePoint; // 탄 발사 위치
     public float bulletSpeed = 7f; // 탄 속도
     public float fireRate = 3f; // 탄 발사 간격
+    
 
     void Start()
     {
