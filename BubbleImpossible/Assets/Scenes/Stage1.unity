@@ -1155,6 +1155,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7774433747822611761, guid: 9e184cc47386eb14882878c5a4212b8b, type: 3}
+    - {fileID: 7587929304666706015, guid: 9e184cc47386eb14882878c5a4212b8b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e184cc47386eb14882878c5a4212b8b, type: 3}
@@ -1648,7 +1649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies: []
   explosionPrefab: {fileID: 3223031359271505891, guid: 155410a7086d1d34ca48c448dfc33156, type: 3}
-  nextSceneName: Stage2
+  gameClearUI: {fileID: 122836, guid: f44c9b2b1bee07548ba74b34e036b350, type: 3}
 --- !u!1 &1963630052
 GameObject:
   m_ObjectHideFlags: 0

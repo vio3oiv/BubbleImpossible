@@ -7,7 +7,7 @@ public class EnemyManager : MonoBehaviour
 {
     public List<Enemy> enemies = new List<Enemy>(); // 적 리스트
     public GameObject explosionPrefab; // 폭발 효과 프리팹
-    public string nextSceneName = "Stage2"; // 다음 스테이지 이름
+    public GameObject gameClearUI;
 
     void Update()
     {
@@ -27,11 +27,16 @@ public class EnemyManager : MonoBehaviour
             FindFirstObjectByType<PatternManager>()?.NextPattern();
         }
 
-        // 적이 전부 없으면 스테이지2로 전환
+        // 적이 전부 없으면 게임 클리어UI생성
         if (enemies.Count == 0)
         {
-            Debug.Log("✅ 모든 적 패턴이 끝났습니다. 다음 스테이지로 이동!");
-            SceneManager.LoadScene(nextSceneName);
+            Debug.Log("✅ 스테이지를 클리어 했습니다!");
+
+            if (gameClearUI != null)
+            {
+                gameClearUI.SetActive(true);
+            }
+
         }
     }
 

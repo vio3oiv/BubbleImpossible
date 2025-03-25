@@ -231,7 +231,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log("💀 플레이어 사망! 즉시 사망 애니메이션");
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
 
         // 사망 후 아래로 떨어지는 연출
         rb.gravityScale = 1f;
