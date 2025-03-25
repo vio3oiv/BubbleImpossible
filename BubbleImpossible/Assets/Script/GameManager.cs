@@ -36,11 +36,17 @@ public class GameManager : MonoBehaviour
         if (gameOverUI != null)
         {
             gameOverUI.SetActive(true);
+            // GameOver UI 하위에 있는 모든 Animator를 UnscaledTime으로 설정
+            Animator[] animators = gameOverUI.GetComponentsInChildren<Animator>();
+            foreach (Animator anim in animators)
+            {
+                anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+            }
         }
 
-        // 게임 멈추기
         Time.timeScale = 0f;
     }
+
 
     public void RestartGame()
     {

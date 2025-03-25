@@ -88,7 +88,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: b5633e617485c4f8cb9ad9f34e2a81a7, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -187,7 +187,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 29e809b9291fc4b8ba6abd4d43d79046, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -297,7 +297,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: b5633e617485c4f8cb9ad9f34e2a81a7, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -338,6 +338,22 @@ PrefabInstance:
     - target: {fileID: 189642, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9506184, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9549890, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9574306, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9592454, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11400952, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_Sprite
@@ -587,6 +603,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2865880483989783569, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3038081735138425092, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -603,10 +623,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3573771523916800458, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3734599605121650368, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 296eb9e672cc340c69f6070f6b31a6bb, type: 3}
+    - target: {fileID: 3809087078415087244, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3967940996115161217, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4059904536876653874, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -803,6 +835,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6283006721316411600, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6342099811125653096, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_Padding.m_Left
       value: 20
@@ -918,6 +954,10 @@ PrefabInstance:
     - target: {fileID: 8471386669358434126, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8854175310577172619, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9014732001542461295, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_IsActive
