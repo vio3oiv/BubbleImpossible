@@ -5,8 +5,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public GameObject gameOverUI;
+    public GameObject gameOverUI;  // 게임 오버 UI 패널
+    public GameObject gameClearUI; // 게임 클리어 UI 패널
     private bool isGameOver = false;
+    private bool isGameClear = false;
 
     void Awake()
     {
@@ -25,9 +27,7 @@ public class GameManager : MonoBehaviour
         if (isGameOver) return;
         isGameOver = true;
 
-        Debug.Log("💀 게임 종료! 3초 후 Game Over UI 표시");
-
-        // 3초 후 UI 표시
+        Debug.Log("💀 게임 종료! 1초 후 Game Over UI 표시");
         Invoke(nameof(ShowGameOverUI), 1f);
     }
 
@@ -36,17 +36,25 @@ public class GameManager : MonoBehaviour
         if (gameOverUI != null)
         {
             gameOverUI.SetActive(true);
-            // GameOver UI 하위에 있는 모든 Animator를 UnscaledTime으로 설정
-            Animator[] animators = gameOverUI.GetComponentsInChildren<Animator>();
-            foreach (Animator anim in animators)
-            {
-                anim.updateMode = AnimatorUpdateMode.UnscaledTime;
-            }
         }
-
         Time.timeScale = 0f;
     }
 
+    // 새로 추가: 게임 클리어 처리
+    public void GameClear()
+    {
+        if (isGameClear) return;
+        isGameClear = true;
+
+        Debug.Log("🎉 게임 클리어!");
+        if (gameClearUI != null)
+        {
+            gameClearUI.SetActive(true);
+        }
+
+        Debug.Log("💀 게임 종료! 1초 후 Game Creal UI 표시");
+        Invoke(nameof(gameClearUI), 1f);
+    }
 
     public void RestartGame()
     {

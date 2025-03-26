@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement; // 씬 전환
 
 public class EnemyManager : MonoBehaviour
 {
     public List<Enemy> enemies = new List<Enemy>(); // 적 리스트
     public GameObject explosionPrefab; // 폭발 효과 프리팹
-    public GameObject gameClearUI;
 
     void Update()
     {
+        // hp <= 0인 적들을 제거하는 코루틴 실행
         for (int i = enemies.Count - 1; i >= 0; i--)
         {
             if (enemies[i] != null && enemies[i].hp <= 0)
@@ -19,24 +18,23 @@ public class EnemyManager : MonoBehaviour
             }
         }
 
+        // 리스트에서 null 항목 제거
         enemies.RemoveAll(e => e == null);
 
+        // 적 리스트가 비었으면 GameManager로 게임 클리어 처리를 위임
         if (enemies.Count == 0)
         {
-            Debug.Log("✅ 모든 적이 제거됨, 다음 패턴 실행");
-            FindFirstObjectByType<PatternManager>()?.NextPattern();
-        }
-
-        // 적이 전부 없으면 게임 클리어UI생성
-        if (enemies.Count == 0)
-        {
-            Debug.Log("✅ 스테이지를 클리어 했습니다!");
-
-            if (gameClearUI != null)
+            // 패턴이 남아 있다면 다음 패턴 실행
+            PatternManager patternManager = FindFirstObjectByType<PatternManager>();
+            if (patternManager != null && !patternManager.IsLastPattern())
             {
-                gameClearUI.SetActive(true);
+                patternManager.NextPattern();
             }
-
+            else
+            {
+                // 패턴이 모두 끝났다면 GameManager에서 게임 클리어 처리
+                GameManager.instance.GameClear();
+            }
         }
     }
 
@@ -47,17 +45,17 @@ public class EnemyManager : MonoBehaviour
 
     public IEnumerator DestroyEnemyWithDelay(Enemy enemy)
     {
-        if (enemy == null) yield break; // 적이 이미 삭제되었으면 중단
+        if (enemy == null) yield break;
 
         Animator animator = enemy.GetComponent<Animator>();
         if (animator != null)
         {
-            animator.SetTrigger("OnDeath"); // 사망 애니메이션 실행
+            animator.SetTrigger("OnDeath");
         }
 
-        yield return new WaitForSeconds(1f); // 1초 대기 (사망 애니메이션 유지)
+        yield return new WaitForSeconds(1f);
 
-        if (enemy == null) yield break; // 적이 삭제되었으면 중단
+        if (enemy == null) yield break;
 
         if (explosionPrefab != null)
         {
