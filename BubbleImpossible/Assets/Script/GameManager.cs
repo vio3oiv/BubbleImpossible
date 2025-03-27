@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         {
             gameOverUI.SetActive(true);
         }
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
     }
 
     // 새로 추가: 게임 클리어 처리
@@ -50,6 +50,12 @@ public class GameManager : MonoBehaviour
         if (gameClearUI != null)
         {
             gameClearUI.SetActive(true);
+
+            Animator[] animators = gameClearUI.GetComponentsInChildren<Animator>();
+            foreach (Animator anim in animators)
+            {
+                anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+            }
         }
 
         Debug.Log("💀 게임 종료! 1초 후 Game Creal UI 표시");
