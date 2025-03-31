@@ -30,6 +30,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))  // C 키 눌러서 클리어 테스트
+        {
+            Debug.Log("임시 StageClear 호출됨!");
+            StageCompleted();  //스테이지를 클리어했다고 가정
+        }
+    }
+
     /// <summary>
     /// 외부(예: 스테이지 클리어 조건을 확인하는 로직)에서 호출하여, 현재 스테이지가 클리어되었음을 알림.
     /// 해당 스테이지 버튼은 클리어 상태로 변경되고, 다음 스테이지 버튼은 개방 상태로 전환됩니다.
@@ -49,10 +58,12 @@ public class GameManager : MonoBehaviour
 
         currentStageIndex++;
 
-        // 모든 스테이지 클리어 시 전체 게임 클리어 처리
+        // 모든 스테이지 클리어 후에도 추가 동작 없이 각 스테이지 상태가 유지됨
         if (currentStageIndex >= totalStages)
         {
             GameClear();
+            Debug.Log("모든 스테이지를 클리어했습니다.");
+            // 이곳에 추가적인 메시지나 효과를 넣을 수 있습니다.
         }
     }
 
@@ -104,4 +115,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+
 }

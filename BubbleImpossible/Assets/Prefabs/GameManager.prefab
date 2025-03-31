@@ -45,3 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverUI: {fileID: 6143204248004820543, guid: 9e184cc47386eb14882878c5a4212b8b, type: 3}
+  gameClearUI: {fileID: 122836, guid: f44c9b2b1bee07548ba74b34e036b350, type: 3}
+  stageManager: {fileID: 0}
+  totalStages: 5

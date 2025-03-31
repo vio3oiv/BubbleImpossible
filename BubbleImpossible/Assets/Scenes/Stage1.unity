@@ -1029,6 +1029,10 @@ PrefabInstance:
       propertyPath: gameClearUI
       value: 
       objectReference: {fileID: 773409108}
+    - target: {fileID: 1385127173565944194, guid: a6c02806faee5814896a23e1e12acde3, type: 3}
+      propertyPath: stageManager
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8354680041246362517, guid: a6c02806faee5814896a23e1e12acde3, type: 3}
       propertyPath: m_Name
       value: GameManager

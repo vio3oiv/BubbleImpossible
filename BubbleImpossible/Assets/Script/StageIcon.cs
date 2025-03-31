@@ -28,28 +28,55 @@ public class StageIcon : MonoBehaviour
     /// </summary>
     public void SetState(StageState newState)
     {
+        Debug.Log($"[{gameObject.name}] >>> SetState({newState}) 호출!", this);
         currentState = newState;
-
+        
         // 모든 상태 오브젝트를 비활성화
-        if (lockedObject != null) lockedObject.SetActive(false);
-        if (openObject != null) openObject.SetActive(false);
-        if (clearedObject != null) clearedObject.SetActive(false);
+        if (lockedObject != null)
+        {
+            lockedObject.SetActive(false);
+            Debug.Log($"{gameObject.name} - lockedObject 비활성화");
+        }
+        if (openObject != null)
+        {
+            openObject.SetActive(false);
+            Debug.Log($"{gameObject.name} - openObject 비활성화");
+        }
+        if (clearedObject != null)
+        {
+            clearedObject.SetActive(false);
+            Debug.Log($"{gameObject.name} - clearedObject 비활성화");
+        }
 
         // 새 상태에 따라 해당 오브젝트 활성화
         switch (newState)
         {
             case StageState.Locked:
                 if (lockedObject != null)
+                {
                     lockedObject.SetActive(true);
+                    Debug.Log($"{gameObject.name} - lockedObject 활성화");
+                }
                 break;
             case StageState.Open:
                 if (openObject != null)
+                {
                     openObject.SetActive(true);
+                    Debug.Log($"{gameObject.name} - openObject 활성화");
+                }
                 break;
             case StageState.Cleared:
                 if (clearedObject != null)
+                {
                     clearedObject.SetActive(true);
+                    Debug.Log($"{gameObject.name} - clearedObject 활성화");
+                }
+                else
+                {
+                    Debug.LogWarning($"{gameObject.name} - clearedObject가 할당되지 않음");
+                }
                 break;
         }
     }
+
 }
