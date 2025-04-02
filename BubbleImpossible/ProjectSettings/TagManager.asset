@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - Wall
   - Boundary
+  - Boss
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX

@@ -21,16 +21,22 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        // SaveDataManager 초기화 (저장된 데이터가 없으면 기본값으로 생성)
-        SaveDataManager.Initialize(stageIcons.Count);
-
-        // 저장된 세이브 데이터를 기반으로 각 StageIcon의 상태 업데이트
-        for (int i = 0; i < stageIcons.Count; i++)
+        if (!isInitialized)
         {
-            stageIcons[i].SetState(SaveDataManager.Data.stageStates[i]);
+            // SaveDataManager 초기화 (저장된 데이터가 없으면 기본값으로 생성)
+            SaveDataManager.Initialize(stageIcons.Count);
+
+            // 저장된 세이브 데이터를 기반으로 각 StageIcon의 상태 업데이트
+            for (int i = 0; i < stageIcons.Count; i++)
+            {
+                stageIcons[i].SetState(SaveDataManager.Data.stageStates[i]);
+            }
+            currentStageIndex = SaveDataManager.Data.currentStageIndex;
+
+            isInitialized = true;
         }
-        currentStageIndex = SaveDataManager.Data.currentStageIndex;
     }
+
 
     void Update()
     {

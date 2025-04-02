@@ -173,30 +173,31 @@ public class Player : MonoBehaviour
 
     void KillAllEnemies()
     {
-        // 씬 내 모든 Enemy 찾기
-        Enemy[] allEnemies = FindObjectsOfType<Enemy>();
+        // 씬 내 모든 Enemy를 찾습니다.
+        Enemy[] allEnemies = Object.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
         foreach (Enemy enemy in allEnemies)
         {
             if (enemy != null && !enemy.isDying)
             {
-                enemy.hp = 0; // HP를 0으로
+                enemy.hp = 0; // HP를 0으로 만들어 적을 죽임
                 Debug.Log($"💀 {enemy.name} was killed by Special Skill!");
 
-                // EnemyManager가 있다면 사망 처리
-                EnemyManager mgr = FindFirstObjectByType<EnemyManager>();
+                // EnemyManager가 있다면 사망 처리를 지연시켜 실행
+                EnemyManager mgr = Object.FindFirstObjectByType<EnemyManager>();
                 if (mgr != null)
                 {
                     StartCoroutine(mgr.DestroyEnemyWithDelay(enemy));
                 }
                 else
                 {
-                    // 혹은 enemy 직접 사망 처리
+                    // EnemyManager가 없으면 바로 Destroy 호출
                     Destroy(enemy.gameObject);
                 }
             }
         }
     }
+
 
     void UpdateSkillUI()
     {

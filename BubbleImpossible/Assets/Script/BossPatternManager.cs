@@ -60,22 +60,23 @@ public class BossPatternManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 보스 패턴 프리팹 내의 Boss 컴포넌트를 가진 오브젝트들을 활성화하고, EnemyManager에 등록합니다.
-    /// 만약 일반 Enemy 스크립트를 사용한다면, 아래 코드를 수정하세요.
+    /// 보스 패턴 프리팹 내의 Boss 컴포넌트를 가진 오브젝트들을 활성화하고 등록합니다.
     /// </summary>
     /// <param name="pattern">인스턴스화된 보스 패턴 프리팹</param>
     void SpawnBossEnemiesFromPattern(GameObject pattern)
     {
         // Boss 스크립트를 사용하는 경우
         Boss[] bossEnemies = pattern.GetComponentsInChildren<Boss>();
-        EnemyManager enemyManager = FindObjectOfType<EnemyManager>();
+
+        // 새로운 API 사용: Object.FindFirstObjectByType를 사용합니다.
+        BossPatternManager bpm = Object.FindFirstObjectByType<BossPatternManager>();
 
         foreach (Boss bossEnemy in bossEnemies)
         {
             if (bossEnemy != null)
             {
                 bossEnemy.gameObject.SetActive(true);
-                enemyManager?.RegisterEnemy(bossEnemy);
+                // enemyManager?.RegisterEnemy(bossEnemy); 
             }
         }
     }
