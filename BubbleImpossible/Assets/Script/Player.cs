@@ -256,10 +256,11 @@ public class Player : MonoBehaviour
     {
         // 플레이어 애니메이터를 Idle로 전환
         animator.Play("PlayerIdle");
+    }
 
-        // 필요 시 이동을 정지하거나 다른 로직 처리
-        // rb.velocity = Vector2.zero; 
-        // ...
+    public void ChangeAnimationOnHit()
+    {
+        animator.SetTrigger("specialAttack");
     }
 
 }

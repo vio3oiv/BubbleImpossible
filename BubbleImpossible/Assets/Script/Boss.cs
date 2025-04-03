@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI; // UI 컴포넌트를 사용하기 위해 추가
 
 public class Boss : MonoBehaviour
 {
     [Header("보스 기본 설정")]
     public int hp = 2;                // 보스 체력
-    public bool isBoss = true;        // 보스 여부
+    public bool isBoss = true;        // 보스 여부 (보스 전용 기능 여부)
     public string enemyName;
     public float bulletSpeed = 7f;    // 탄 속도
     public float fireRate = 3f;       // 탄 발사 간격
@@ -26,6 +27,15 @@ public class Boss : MonoBehaviour
     // 여러 개의 발사 위치 중 랜덤 선택
     public Transform[] firePoint;
 
+    [Header("보스 타이머 설정")]
+    public float bossTimeLimit = 60f;      // 보스 타이머 제한 시간 (초)
+    private float bossTimeRemaining;       // 남은 시간
+    private Coroutine bossTimerCoroutine;  // 타이머 코루틴
+    public Text bossTimerText;             // 보스 타이머 UI 텍스트 (프리팹에서 생성 후 할당)
+
+    [Header("보스 HP UI 설정")]
+    public Slider bossHPSlider;           // 보스 HP를 표시할 슬라이더 UI
+
     private Animator animator;
     private Transform player;
     public bool isDying = false;
@@ -37,10 +47,25 @@ public class Boss : MonoBehaviour
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        // 보스라면 탄 발사 코루틴 시작
+        // 보스 HP UI 초기화: 최대값과 현재값을 hp로 설정
+        if (bossHPSlider != null)
+        {
+            bossHPSlider.maxValue = hp;
+            bossHPSlider.value = hp;
+        }
+
+        // 보스 타이머 초기화: 남은 시간을 bossTimeLimit으로 설정하고 UI 업데이트
+        bossTimeRemaining = bossTimeLimit;
+        if (bossTimerText != null)
+        {
+            bossTimerText.text = "Boss Time: " + Mathf.Ceil(bossTimeRemaining).ToString("F0") + "s";
+        }
+
+        // 보스라면 탄 발사 코루틴과 타이머 코루틴 시작
         if (isBoss)
         {
             StartCoroutine(FireRoutine());
+            bossTimerCoroutine = StartCoroutine(BossTimer());
         }
     }
 
@@ -68,27 +93,23 @@ public class Boss : MonoBehaviour
     /// </summary>
     void Fire()
     {
-        // 보스 불렛 프리팹 리스트가 비어있으면 오류 출력
         if (bossBulletPrefabs == null || bossBulletPrefabs.Count == 0)
         {
             Debug.LogError("🚨 보스 불렛 프리팹 리스트가 비어 있습니다!");
             return;
         }
-        // firePoint 배열이 할당되지 않았거나 비어있으면 오류 출력
         if (firePoint == null || firePoint.Length == 0)
         {
             Debug.LogError("🚨 firePoint 배열이 설정되지 않았습니다!");
             return;
         }
 
-        // 랜덤 인덱스 선택: 탄 프리팹과 발사 위치
         int randomBulletIndex = Random.Range(0, bossBulletPrefabs.Count);
         GameObject selectedBulletPrefab = bossBulletPrefabs[randomBulletIndex];
 
         int randomFirePointIndex = Random.Range(0, firePoint.Length);
         Transform chosenFirePoint = firePoint[randomFirePointIndex];
 
-        // 선택된 발사 위치에서 탄 인스턴스화
         GameObject bullet = Instantiate(selectedBulletPrefab, chosenFirePoint.position, Quaternion.identity);
         if (bullet == null)
         {
@@ -103,7 +124,7 @@ public class Boss : MonoBehaviour
             return;
         }
 
-        // 탄을 왼쪽 방향으로 발사 (필요 시 방향 수정)
+        // 탄을 왼쪽으로 발사 (필요 시 방향 수정)
         rb.linearVelocity = Vector2.left * bulletSpeed;
         Debug.Log($"🚀 보스가 탄을 발사했습니다! 속도: {rb.linearVelocity}");
     }
@@ -134,21 +155,59 @@ public class Boss : MonoBehaviour
     }
 
     /// <summary>
+    /// 보스 타이머 코루틴: bossTimeLimit부터 카운트다운하며, UI를 매 프레임 업데이트합니다.
+    /// 시간이 다 되면, 예를 들어 플레이어의 패배 처리(GameManager.instance.GameOver())를 호출합니다.
+    /// </summary>
+    IEnumerator BossTimer()
+    {
+        while (bossTimeRemaining > 0)
+        {
+            bossTimeRemaining -= Time.deltaTime;
+            if (bossTimerText != null)
+            {
+                bossTimerText.text = "Boss Time: " + Mathf.Ceil(bossTimeRemaining).ToString("F0") + "s";
+            }
+            yield return null;
+        }
+
+        // 시간이 다 되었을 때 (보스 타이머 종료)
+        if (!isDying)
+        {
+            Debug.Log("보스 타이머 종료: 시간이 다 되었습니다!");
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.GameOver();
+            }
+        }
+    }
+
+    /// <summary>
     /// 충돌 처리:
-    /// - 플레이어 탄과 충돌 시 보스 체력 감소 및 사망 처리
-    /// - 플레이어와 충돌 시 플레이어에 데미지 전달
+    /// - 플레이어 탄(예: 태그 "BossBullet")과 충돌 시 보스 체력 감소 및 사망 처리
+    /// - 플레이어와 충돌 시 플레이어에게 데미지 전달
     /// </summary>
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // "BossBullet" 태그의 탄과 충돌 시
+        // 플레이어 탄과 충돌 (태그 "BossBullet"를 사용)
         if (collision.CompareTag("BossBullet"))
         {
             hp -= 1;
             Debug.Log($"🚨 보스 체력: {hp}");
+            // 보스 HP 슬라이더 UI 업데이트
+            if (bossHPSlider != null)
+            {
+                bossHPSlider.value = hp;
+            }
             if (hp <= 0 && !isDying)
             {
                 isDying = true;
                 animator.SetTrigger("OnDeath");
+                // 타이머 코루틴 중지
+                if (bossTimerCoroutine != null)
+                {
+                    StopCoroutine(bossTimerCoroutine);
+                    bossTimerCoroutine = null;
+                }
                 StartCoroutine(FlyUpAndDestroy());
             }
             Destroy(collision.gameObject);
@@ -172,7 +231,7 @@ public class Boss : MonoBehaviour
     }
 
     /// <summary>
-    /// 사망 애니메이션 후 보스가 위로 날아오르며 파괴됩니다.
+    /// 보스가 사망 애니메이션 후 위로 날아오르며 파괴됩니다.
     /// </summary>
     IEnumerator FlyUpAndDestroy()
     {

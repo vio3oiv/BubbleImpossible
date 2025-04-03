@@ -71,7 +71,7 @@ public class BossSpecialBullet : MonoBehaviour
                     // (예시로 로그를 남기며 처리)
                     Debug.Log("변환된 보스 스페셜 탄환이 플레이어에 맞았습니다. 플레이어 애니메이션 변경 및 탄환 방향 전환.");
                     // 만약 Player 스크립트에 애니메이션 변경 함수가 있다면 호출할 수 있습니다.
-                    // player.ChangeAnimationOnHit();
+                    player.ChangeAnimationOnHit();
 
                     // 탄환의 이동 방향을 오른쪽으로 전환
                     direction = Vector2.right;
