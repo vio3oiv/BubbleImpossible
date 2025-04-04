@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI; // UI 컴포넌트를 사용하기 위해 추가
+using UnityEngine.UI;       // 기존 UI 관련 네임스페이스 (Slider 등은 그대로 사용)
+using TMPro;                // TextMeshPro 네임스페이스 추가
 
 public class Boss : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class Boss : MonoBehaviour
     public float bossTimeLimit = 60f;      // 보스 타이머 제한 시간 (초)
     private float bossTimeRemaining;       // 남은 시간
     private Coroutine bossTimerCoroutine;  // 타이머 코루틴
-    public Text bossTimerText;             // 보스 타이머 UI 텍스트 (프리팹에서 생성 후 할당)
+    public TMP_Text bossTimerText;         // 보스 타이머 UI TMP_Text (프리팹에서 생성 후 할당)
 
     [Header("보스 HP UI 설정")]
     public Slider bossHPSlider;           // 보스 HP를 표시할 슬라이더 UI
@@ -58,7 +59,9 @@ public class Boss : MonoBehaviour
         bossTimeRemaining = bossTimeLimit;
         if (bossTimerText != null)
         {
-            bossTimerText.text = "Boss Time: " + Mathf.Ceil(bossTimeRemaining).ToString("F0") + "s";
+            int minutes = Mathf.FloorToInt(bossTimeRemaining / 60f);
+            int seconds = Mathf.FloorToInt(bossTimeRemaining % 60f);
+            bossTimerText.text = string.Format("{0}:{1:00}", minutes, seconds);
         }
 
         // 보스라면 탄 발사 코루틴과 타이머 코루틴 시작
@@ -165,7 +168,9 @@ public class Boss : MonoBehaviour
             bossTimeRemaining -= Time.deltaTime;
             if (bossTimerText != null)
             {
-                bossTimerText.text = "Boss Time: " + Mathf.Ceil(bossTimeRemaining).ToString("F0") + "s";
+                int minutes = Mathf.FloorToInt(bossTimeRemaining / 60f);
+                int seconds = Mathf.FloorToInt(bossTimeRemaining % 60f);
+                bossTimerText.text = string.Format("{0}:{1:00}", minutes, seconds);
             }
             yield return null;
         }
@@ -180,6 +185,7 @@ public class Boss : MonoBehaviour
             }
         }
     }
+
 
     /// <summary>
     /// 충돌 처리:
