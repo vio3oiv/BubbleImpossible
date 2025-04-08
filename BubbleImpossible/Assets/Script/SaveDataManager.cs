@@ -3,8 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class SaveDataContainer
 {
-    public StageState[] stageStates; // °¢ ½ºÅ×ÀÌÁöÀÇ »óÅÂ ¹è¿­
-    public int currentStageIndex;     // ÇöÀç ÁøÇà ÁßÀÎ ½ºÅ×ÀÌÁö ÀÎµ¦½º
+    public StageState[] stageStates; // ê° ìŠ¤í…Œì´ì§€ì˜ ìƒíƒœ ë°°ì—´
+    public int currentStageIndex;     // í˜„ì¬ ì§„í–‰ ì¤‘ì¸ ìŠ¤í…Œì´ì§€ ì¸ë±ìŠ¤
 }
 
 public static class SaveDataManager
@@ -13,10 +13,7 @@ public static class SaveDataManager
 
     public static SaveDataContainer Data { get; private set; }
 
-    /// <summary>
-    /// ÀúÀåµÈ ¼¼ÀÌºê µ¥ÀÌÅÍ°¡ ÀÖÀ¸¸é ºÒ·¯¿À°í, ¾øÀ¸¸é ±âº»°ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
-    /// </summary>
-    /// <param name="stageCount">ÀüÃ¼ ½ºÅ×ÀÌÁö °³¼ö</param>
+  
     public static void Initialize(int stageCount)
     {
         if (PlayerPrefs.HasKey(SaveKey))
@@ -29,7 +26,7 @@ public static class SaveDataManager
             Data = new SaveDataContainer();
             Data.stageStates = new StageState[stageCount];
 
-            // ±âº»°ª: Ã¹ ¹øÂ° ½ºÅ×ÀÌÁö´Â Open, ³ª¸ÓÁö´Â Locked »óÅÂ
+            // ê¸°ë³¸ê°’: ì²« ë²ˆì§¸ ìŠ¤í…Œì´ì§€ëŠ” Open, ë‚˜ë¨¸ì§€ëŠ” Locked ìƒíƒœ
             Data.stageStates[0] = StageState.Open;
             for (int i = 1; i < stageCount; i++)
             {
@@ -41,7 +38,7 @@ public static class SaveDataManager
     }
 
     /// <summary>
-    /// ÇöÀç µ¥ÀÌÅÍ¸¦ PlayerPrefs¿¡ ÀúÀåÇÕ´Ï´Ù.
+    /// í˜„ì¬ ë°ì´í„°ë¥¼ PlayerPrefsì— ì €ì¥í•©ë‹ˆë‹¤.
     /// </summary>
     public static void Save()
     {
@@ -51,7 +48,7 @@ public static class SaveDataManager
     }
 
     /// <summary>
-    /// °ÔÀÓ ÇÃ·¹ÀÌ°¡ Á¾·áµÉ ¶§ È£ÃâµÇ¾î ¼¼ÀÌºê µ¥ÀÌÅÍ¸¦ »èÁ¦ÇÕ´Ï´Ù.
+    /// ê²Œì„ ì¢…ë£Œ ì‹œ ì„¸ì´ë¸Œ ë°ì´í„°ë¥¼ ì‚­ì œí•˜ì—¬ ë‹¤ìŒ ì‹¤í–‰ ì‹œ ì´ˆê¸°í™”ë˜ë„ë¡ í•©ë‹ˆë‹¤.
     /// </summary>
     public static void ClearSaveData()
     {

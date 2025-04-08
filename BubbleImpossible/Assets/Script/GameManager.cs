@@ -23,12 +23,14 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+           
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
 
     void Update()
     {
@@ -89,10 +91,23 @@ public class GameManager : MonoBehaviour
     {
         if (isGameClear) return;
         isGameClear = true;
-
         Debug.Log("🎉 게임 클리어!");
-        // 1초 후에 전체 게임 클리어 UI 표시
-        Invoke(nameof(ShowGameClearUI), 1f);
+        // 1초 후에 전체 게임 클리어 UI 표시 및 UI 업데이트
+        Invoke(nameof(OnGameClear), 1f);
+
+    }
+
+    void OnGameClear()
+    {
+        if (gameClearUI != null)
+        {
+            gameClearUI.SetActive(true);
+        }
+        // 스테이지 맵으로 돌아갈 때 UI가 최신 상태인지 확인하기 위해 업데이트를 호출할 수 있습니다.
+        if (stageManager != null)
+        {
+            stageManager.UpdateAllStageIcons();
+        }
     }
 
     private void ShowGameClearUI()
