@@ -53,8 +53,8 @@ public class Player : MonoBehaviour
         float moveY = Input.GetAxisRaw("Vertical");
         Vector2 movement = new Vector2(moveX, moveY).normalized;
 
-        bool isMoving = (movement != Vector2.zero);
-        animator.SetBool("isMoving", isMoving);
+        float isMoving = (movement != Vector2.zero) ? 1f : 0f;
+        animator.SetFloat("isMoving", isMoving);
 
         rb.linearVelocity = movement * speed;
 

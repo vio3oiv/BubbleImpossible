@@ -55,6 +55,7 @@ MonoBehaviour:
   openObject: {fileID: 7440455651958779273}
   clearedObject: {fileID: 231303085684250809}
   currentState: 1
+  stageIndex: 0
 --- !u!1001 &2274802219877393259
 PrefabInstance:
   m_ObjectHideFlags: 0

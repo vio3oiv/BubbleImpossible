@@ -11,6 +11,7 @@ TagManager:
   - Boss
   - PlayerBullet
   - BossBullet
+  - StageButton
   layers:
   - Default
   - TransparentFX

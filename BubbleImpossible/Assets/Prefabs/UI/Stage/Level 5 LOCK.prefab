@@ -69,7 +69,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5864468928373060449}
-  - component: {fileID: 3988995811562527639}
   m_Layer: 0
   m_Name: Level 5 LOCK
   m_TagString: Untagged
@@ -97,22 +96,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3988995811562527639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530948970427452619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393496f709f4648b4b3c5eb0053e794d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lockedObject: {fileID: 530948970427452619}
-  openObject: {fileID: 7028788122076794761, guid: 4a979c63561814afd89761728c13fbf8, type: 3}
-  clearedObject: {fileID: 5046758421629726110, guid: afe6541a759dc4bf29dbdd7a226bdea9, type: 3}
-  currentState: 0
 --- !u!1 &4584931544728375819
 GameObject:
   m_ObjectHideFlags: 0

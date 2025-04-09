@@ -6,15 +6,15 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager instance;
 
-    [Header("미리 배치된 스테이지 버튼 (총 5개)")]
+    // StageIcon 리스트: OnSceneLoaded()에서 새롭게 검색하여 할당합니다.
     public List<StageIcon> stageIcons;
 
-    public int currentStageIndex = 0;
-    private bool stageClearProcessed = false;
-    private static bool isInitialized = false;
+    // 중복 UI 업데이트를 방지하기 위한 플래그
+    private bool uiUpdatedOnSceneLoad = false;
 
     void Awake()
     {
+        // 싱글톤 패턴: 첫 인스턴스만 유지하고 나머지는 파괴합니다.
         if (instance == null)
         {
             instance = this;
@@ -28,93 +28,81 @@ public class StageManager : MonoBehaviour
         }
     }
 
-
     void Start()
     {
-        if (!isInitialized)
-        {
-            // 기존 씬에서 초기화
-            if (stageIcons == null || stageIcons.Count == 0)
-            {
-                Debug.LogError("StageManager: stageIcons 리스트가 비어있거나 할당되지 않았습니다.");
-                return;
-            }
+        // OnSceneLoaded()에서 이미 UI 업데이트가 완료되었다면 Start에서는 추가 업데이트를 하지 않습니다.
+        if (uiUpdatedOnSceneLoad)
+            return;
 
+        if (stageIcons == null || stageIcons.Count == 0)
+        {
+            Debug.LogError("StageManager: stageIcons 리스트가 할당되지 않았습니다. (수동 할당을 사용하는 경우 Inspector 설정을 확인하세요.)");
+            return;
+        }
+
+        // SaveDataManager 초기화
+        if (SaveDataManager.Data == null || SaveDataManager.Data.stageStates == null)
             SaveDataManager.Initialize(stageIcons.Count);
 
-            for (int i = 0; i < stageIcons.Count; i++)
-            {
-                stageIcons[i].SetState(SaveDataManager.Data.stageStates[i]);
-            }
-            currentStageIndex = SaveDataManager.Data.currentStageIndex;
-            isInitialized = true;
-        }
+        UpdateAllStageIcons();
     }
 
-    // 씬이 로드될 때마다 새로운 StageIcon들을 찾아 재할당
+    // 씬 전환 시 호출되는 이벤트 핸들러
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "StageMap")
         {
-            // 현재 씬에서 StageIcon 새로 할당
-            StageIcon[] newStageIcons = GameObject.FindObjectsOfType<StageIcon>();
-            stageIcons = new List<StageIcon>(newStageIcons);
-            Debug.Log("새로운 StageIcon들이 할당되었습니다. 개수: " + stageIcons.Count);
-
-            // 만약 새 StageIcon의 개수가 저장된 배열보다 많다면 배열 재설정
-            if (stageIcons.Count > SaveDataManager.Data.stageStates.Length)
+            // 모든 StageIcon을 검색 (비활성 객체 포함) 후 태그 "StageButton"을 기준으로 필터링
+            StageIcon[] allFoundIcons = Object.FindObjectsByType<StageIcon>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            List<StageIcon> filteredIcons = new List<StageIcon>();
+            foreach (StageIcon icon in allFoundIcons)
             {
+                if (icon == null)
+                    continue;
+                if (icon.CompareTag("StageButton"))
+                    filteredIcons.Add(icon);
+            }
+            if (filteredIcons.Count == 0)
+            {
+                Debug.LogWarning("StageMap 씬에서 태그 'StageButton'을 가진 StageIcon을 찾을 수 없습니다.");
+                return;
+            }
+
+            // 필터링된 StageIcon들을 stageIcons에 할당하고, stageIndex 필드를 기준으로 정렬합니다.
+            filteredIcons.Sort((a, b) => a.stageIndex.CompareTo(b.stageIndex));
+            stageIcons = filteredIcons;
+            Debug.Log($"정렬 후 할당된 StageIcon 개수: {stageIcons.Count}");
+            foreach (StageIcon icon in stageIcons)
+            {
+                Debug.Log($"[Sorted] StageIcon: {icon.gameObject.name}, stageIndex: {icon.stageIndex}");
+            }
+
+            // SaveDataManager 데이터 확인: 데이터가 없으면 초기화, StageIcon 개수보다 적으면 확장
+            if (SaveDataManager.Data == null || SaveDataManager.Data.stageStates == null)
+            {
+                Debug.LogWarning("SaveDataManager가 초기화되어 있지 않습니다. 초기화 진행합니다.");
+                SaveDataManager.Initialize(stageIcons.Count);
+            }
+            else if (stageIcons.Count > SaveDataManager.Data.stageStates.Length)
+            {
+                int oldLength = SaveDataManager.Data.stageStates.Length;
                 StageState[] newStates = new StageState[stageIcons.Count];
-                // 기존 배열 복사
-                for (int i = 0; i < SaveDataManager.Data.stageStates.Length; i++)
-                {
+                for (int i = 0; i < oldLength; i++)
                     newStates[i] = SaveDataManager.Data.stageStates[i];
-                }
-                // 나머지 기본값 설정
-                for (int i = SaveDataManager.Data.stageStates.Length; i < newStates.Length; i++)
-                {
+                for (int i = oldLength; i < newStates.Length; i++)
                     newStates[i] = StageState.Locked;
-                }
                 SaveDataManager.Data.stageStates = newStates;
-                Debug.Log("SaveDataManager.Data.stageStates 배열이 재설정되었습니다. 새 길이: " + newStates.Length);
+                Debug.Log($"SaveDataManager.Data.stageStates 배열이 재설정되었습니다. 새 길이: {newStates.Length}");
             }
 
             UpdateAllStageIcons();
+            uiUpdatedOnSceneLoad = true;
         }
     }
 
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C) && !stageClearProcessed)
-        {
-            Debug.Log("임시 StageClear 호출됨!");
-            StageClear(currentStageIndex);
-            stageClearProcessed = true;
-        }
-    }
-
-    public void StageClear(int stageIndex)
-    {
-        if (stageIndex < 0 || stageIndex >= stageIcons.Count)
-        {
-            Debug.LogWarning($"잘못된 스테이지 인덱스: {stageIndex}");
-            return;
-        }
-
-        stageIcons[stageIndex].SetState(StageState.Cleared);
-        SaveDataManager.Data.stageStates[stageIndex] = StageState.Cleared;
-
-        int nextStageIndex = stageIndex + 1;
-        if (nextStageIndex < stageIcons.Count)
-        {
-            stageIcons[nextStageIndex].SetState(StageState.Open);
-            SaveDataManager.Data.stageStates[nextStageIndex] = StageState.Open;
-            SaveDataManager.Data.currentStageIndex = nextStageIndex;
-        }
-        SaveDataManager.Save();
-    }
-
+    /// <summary>
+    /// SaveDataManager의 stageStates 배열에 따라 각 StageIcon의 상태를 업데이트합니다.
+    /// </summary>
     public void UpdateAllStageIcons()
     {
         if (stageIcons == null)
@@ -122,38 +110,54 @@ public class StageManager : MonoBehaviour
             Debug.LogError("StageManager.UpdateAllStageIcons: stageIcons 리스트가 null입니다.");
             return;
         }
-
-        if (SaveDataManager.Data == null)
+        if (SaveDataManager.Data == null || SaveDataManager.Data.stageStates == null)
         {
-            Debug.LogError("StageManager.UpdateAllStageIcons: SaveDataManager.Data가 null입니다.");
+            Debug.LogError("StageManager.UpdateAllStageIcons: SaveDataManager 데이터가 null입니다.");
             return;
         }
-
-        if (SaveDataManager.Data.stageStates == null)
+        int count = Mathf.Min(stageIcons.Count, SaveDataManager.Data.stageStates.Length);
+        for (int i = 0; i < count; i++)
         {
-            Debug.LogError("StageManager.UpdateAllStageIcons: SaveDataManager.Data.stageStates가 null입니다.");
-            return;
-        }
-
-        for (int i = 0; i < stageIcons.Count; i++)
-        {
-            if (stageIcons[i] == null)
-            {
-                Debug.LogWarning($"UpdateAllStageIcons: stageIcons[{i}]가 null입니다.");
-                continue;
-            }
-            if (i >= SaveDataManager.Data.stageStates.Length)
-            {
-                Debug.LogWarning($"UpdateAllStageIcons: SaveDataManager.Data.stageStates 배열 범위를 초과했습니다. 인덱스: {i}");
-                continue;
-            }
             stageIcons[i].SetState(SaveDataManager.Data.stageStates[i]);
         }
     }
 
+    /// <summary>
+    /// 지정된 스테이지 인덱스에 해당하는 스테이지를 클리어 처리하고,
+    /// 만약 다음 스테이지가 존재하며 Locked 상태라면 Open으로 변경합니다.
+    /// 변경 사항은 저장 후 UI에 반영됩니다.
+    /// </summary>
+    /// <param name="stageIndex">클리어된 스테이지의 인덱스 (0부터 시작)</param>
+    public void StageClear(int stageIndex)
+    {
+        if (SaveDataManager.Data == null || SaveDataManager.Data.stageStates == null)
+        {
+            Debug.LogError("SaveDataManager 데이터가 초기화되지 않았습니다.");
+            return;
+        }
+        if (stageIndex < 0 || stageIndex >= SaveDataManager.Data.stageStates.Length)
+        {
+            Debug.LogWarning($"유효하지 않은 스테이지 인덱스: {stageIndex}");
+            return;
+        }
+        Debug.Log($"[Before StageClear] Data.stageStates[{stageIndex}] = {SaveDataManager.Data.stageStates[stageIndex]}");
+
+        // 현재 스테이지를 Cleared로 변경
+        SaveDataManager.Data.stageStates[stageIndex] = StageState.Cleared;
+
+        // 다음 스테이지가 있고 그 상태가 Locked라면 Open으로 변경
+        if (stageIndex + 1 < SaveDataManager.Data.stageStates.Length &&
+            SaveDataManager.Data.stageStates[stageIndex + 1] == StageState.Locked)
+        {
+            SaveDataManager.Data.stageStates[stageIndex + 1] = StageState.Open;
+        }
+        SaveDataManager.Save();
+        Debug.Log($"[After StageClear] Data.stageStates[{stageIndex}] = {SaveDataManager.Data.stageStates[stageIndex]}");
+        UpdateAllStageIcons();
+    }
+
     void OnApplicationQuit()
     {
-        SaveDataManager.ClearSaveData();
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

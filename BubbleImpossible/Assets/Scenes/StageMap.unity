@@ -4823,9 +4823,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5141057004801633598, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
+      propertyPath: stageIndex
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949501938446653949, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6921626682736695185, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
       propertyPath: m_Name
       value: Level 5 Position
+      objectReference: {fileID: 0}
+    - target: {fileID: 6921626682736695185, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6921626682736695185, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
+      propertyPath: m_TagString
+      value: StageButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4897,6 +4913,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 942743413}
     m_Modifications:
+    - target: {fileID: 3998579227499836488, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5446158835389570527, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
+      propertyPath: stageIndex
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5694148086899395266, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4981,6 +5005,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level 3 Position
       objectReference: {fileID: 0}
+    - target: {fileID: 8647540852280711820, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8647540852280711820, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
+      propertyPath: m_TagString
+      value: StageButton
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4994,6 +5026,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 942743413}
     m_Modifications:
+    - target: {fileID: 1050226070310596674, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
+      propertyPath: stageIndex
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2073579685542813755, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7955691209452740251, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5078,6 +5118,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level 4 Position
       objectReference: {fileID: 0}
+    - target: {fileID: 8543141656945625689, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543141656945625689, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
+      propertyPath: m_TagString
+      value: StageButton
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5094,6 +5142,14 @@ PrefabInstance:
     - target: {fileID: 1496333634844442297, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
       propertyPath: m_Name
       value: Level 1 Position
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496333634844442297, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496333634844442297, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
+      propertyPath: m_TagString
+      value: StageButton
       objectReference: {fileID: 0}
     - target: {fileID: 3635786147010958595, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
       propertyPath: m_Pivot.x
@@ -5173,6 +5229,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3635786147010958595, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440455651958779273, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5269,6 +5329,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level 2 Position
       objectReference: {fileID: 0}
+    - target: {fileID: 6660933624639113097, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6660933624639113097, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
+      propertyPath: m_TagString
+      value: StageButton
+      objectReference: {fileID: 0}
     - target: {fileID: 6876617066109102107, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5347,6 +5415,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6876617066109102107, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530882218290668775, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
+      propertyPath: stageIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9119367785343387064, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

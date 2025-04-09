@@ -1049,7 +1049,6 @@ GameObject:
   - component: {fileID: 563644953306978232}
   - component: {fileID: 1322522492394263722}
   - component: {fileID: 3646071611435684652}
-  - component: {fileID: 6238228978938452361}
   m_Layer: 0
   m_Name: Level 1 LOCK
   m_TagString: Untagged
@@ -1284,22 +1283,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6238228978938452361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7549773230075853944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393496f709f4648b4b3c5eb0053e794d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lockedObject: {fileID: 7549773230075853944}
-  openObject: {fileID: 68578698264354385, guid: aa235114e563448ea8ee93fcbaaf12f8, type: 3}
-  clearedObject: {fileID: 2063907017636363218, guid: 862e39633ea36435f87d8d6340a45885, type: 3}
-  currentState: 0
 --- !u!1 &7574298414006215249
 GameObject:
   m_ObjectHideFlags: 0

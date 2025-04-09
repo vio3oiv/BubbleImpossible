@@ -10,36 +10,41 @@ public class SaveDataContainer
 public static class SaveDataManager
 {
     private const string SaveKey = "GameSaveData";
-
     public static SaveDataContainer Data { get; private set; }
 
-  
     public static void Initialize(int stageCount)
     {
         if (PlayerPrefs.HasKey(SaveKey))
         {
             string json = PlayerPrefs.GetString(SaveKey);
             Data = JsonUtility.FromJson<SaveDataContainer>(json);
+
+            // 저장된 데이터에 stageStates 배열이 부족하면 확장
+            if (Data.stageStates == null || Data.stageStates.Length < stageCount)
+            {
+                StageState[] newStates = new StageState[stageCount];
+                int oldLength = (Data.stageStates != null) ? Data.stageStates.Length : 0;
+                for (int i = 0; i < oldLength; i++)
+                    newStates[i] = Data.stageStates[i];
+                for (int i = oldLength; i < stageCount; i++)
+                    newStates[i] = StageState.Locked;
+                if (oldLength == 0)
+                    newStates[0] = StageState.Open;
+                Data.stageStates = newStates;
+            }
         }
         else
         {
             Data = new SaveDataContainer();
             Data.stageStates = new StageState[stageCount];
-
-            // 기본값: 첫 번째 스테이지는 Open, 나머지는 Locked 상태
             Data.stageStates[0] = StageState.Open;
             for (int i = 1; i < stageCount; i++)
-            {
                 Data.stageStates[i] = StageState.Locked;
-            }
             Data.currentStageIndex = 0;
             Save();
         }
     }
 
-    /// <summary>
-    /// 현재 데이터를 PlayerPrefs에 저장합니다.
-    /// </summary>
     public static void Save()
     {
         string json = JsonUtility.ToJson(Data);
@@ -47,9 +52,6 @@ public static class SaveDataManager
         PlayerPrefs.Save();
     }
 
-    /// <summary>
-    /// 게임 종료 시 세이브 데이터를 삭제하여 다음 실행 시 초기화되도록 합니다.
-    /// </summary>
     public static void ClearSaveData()
     {
         PlayerPrefs.DeleteKey(SaveKey);
