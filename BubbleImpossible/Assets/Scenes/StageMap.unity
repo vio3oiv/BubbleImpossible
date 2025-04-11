@@ -4829,7 +4829,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5949501938446653949, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6921626682736695185, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
       propertyPath: m_Name
@@ -4842,6 +4842,10 @@ PrefabInstance:
     - target: {fileID: 6921626682736695185, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
       propertyPath: m_TagString
       value: StageButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930544087959602338, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4915,7 +4919,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3998579227499836488, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5446158835389570527, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
       propertyPath: stageIndex
@@ -5032,7 +5036,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2073579685542813755, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7955691209452740251, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
       propertyPath: m_Pivot.x
@@ -5233,7 +5237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7440455651958779273, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5423,7 +5427,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9119367785343387064, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

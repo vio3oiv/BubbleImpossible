@@ -12,37 +12,23 @@ public static class SaveDataManager
     private const string SaveKey = "GameSaveData";
     public static SaveDataContainer Data { get; private set; }
 
+    /// <summary>
+    /// 게임 시작 시(새 게임) 무조건 기본 상태로 초기화합니다.
+    /// 이전에 저장된 데이터가 있더라도 무시하고 데이터를 새로 생성합니다.
+    /// 게임 실행 중에는 Data가 유지되어 진행 상황을 관리합니다.
+    /// </summary>
     public static void Initialize(int stageCount)
     {
-        if (PlayerPrefs.HasKey(SaveKey))
+        // 이전 데이터와 상관없이, 새 게임 시작 시 무조건 기본 데이터로 초기화합니다.
+        Data = new SaveDataContainer();
+        Data.stageStates = new StageState[stageCount];
+        Data.stageStates[0] = StageState.Open;
+        for (int i = 1; i < stageCount; i++)
         {
-            string json = PlayerPrefs.GetString(SaveKey);
-            Data = JsonUtility.FromJson<SaveDataContainer>(json);
-
-            // 저장된 데이터에 stageStates 배열이 부족하면 확장
-            if (Data.stageStates == null || Data.stageStates.Length < stageCount)
-            {
-                StageState[] newStates = new StageState[stageCount];
-                int oldLength = (Data.stageStates != null) ? Data.stageStates.Length : 0;
-                for (int i = 0; i < oldLength; i++)
-                    newStates[i] = Data.stageStates[i];
-                for (int i = oldLength; i < stageCount; i++)
-                    newStates[i] = StageState.Locked;
-                if (oldLength == 0)
-                    newStates[0] = StageState.Open;
-                Data.stageStates = newStates;
-            }
+            Data.stageStates[i] = StageState.Locked;
         }
-        else
-        {
-            Data = new SaveDataContainer();
-            Data.stageStates = new StageState[stageCount];
-            Data.stageStates[0] = StageState.Open;
-            for (int i = 1; i < stageCount; i++)
-                Data.stageStates[i] = StageState.Locked;
-            Data.currentStageIndex = 0;
-            Save();
-        }
+        Data.currentStageIndex = 0;
+        Save();
     }
 
     public static void Save()

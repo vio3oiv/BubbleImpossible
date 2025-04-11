@@ -54,7 +54,7 @@ MonoBehaviour:
   lockedObject: {fileID: 5949501938446653949}
   openObject: {fileID: 2781478622961013288}
   clearedObject: {fileID: 6930544087959602338}
-  currentState: 0
+  currentState: 2
   stageIndex: 0
 --- !u!1001 &2749321315293292860
 PrefabInstance:
@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5046758421629726110, guid: afe6541a759dc4bf29dbdd7a226bdea9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -292,7 +292,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 530948970427452619, guid: 5fb035db8d0804391864b8343ea00afe, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3988995811562527639, guid: 5fb035db8d0804391864b8343ea00afe, type: 3}
       propertyPath: m_Enabled
