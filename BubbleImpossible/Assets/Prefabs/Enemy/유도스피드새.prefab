@@ -199,8 +199,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 2
-  speed: 4
+  speed: 3
   enemyName: HomingBird
+  isDying: 0
   isSpecialBird: 0
   targetPosition: {x: 0, y: 0}
   specialBulletPrefab: {fileID: 0}

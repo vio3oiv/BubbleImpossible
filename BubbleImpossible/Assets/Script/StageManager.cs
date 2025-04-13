@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
@@ -26,7 +26,7 @@ public class StageManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
-        }*/
+        }
     }
 
     void Start()
@@ -172,4 +172,4 @@ public class StageManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-}
+}*/

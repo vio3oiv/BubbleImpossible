@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public string enemyName; // 적 이름 (특수 적 구분)
     private Transform player;
     private Animator animator;
-    //private bool hasPassedPlayer = false;
+    private bool hasPassedPlayer = false;
     public bool isDying = false; // 사망 여부
 
     // SpecialBird 관련 변수
@@ -48,7 +48,34 @@ public class Enemy : MonoBehaviour
                 MoveLeft();
             }
         }
+
     }
+    private void FixedUpdate()
+    {
+        // HomingBird 처리
+        if (enemyName == "HomingBird" && player != null && !hasPassedPlayer)
+        {
+            if (transform.position.x > player.position.x)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+            }
+            else
+            {
+                hasPassedPlayer = true;
+            }
+        }
+        // SpecialBird이면 FixedUpdate()에서 기본 이동 로직 무시
+        else if (isSpecialBird)
+        {
+            // SpecialBird의 이동은 Update()에서 MoveToTarget()에 의해 처리되므로, FixedUpdate에서는 별도의 이동 처리 없이 넘어갑니다.
+        }
+        else
+        {
+            // 기본 이동 (좌측)
+            transform.position += Vector3.left * speed * Time.deltaTime;
+        }
+    }
+
 
     void MoveLeft()
     {
@@ -125,7 +152,8 @@ public class Enemy : MonoBehaviour
                 isDying = true;
                 animator.SetTrigger("OnDeath");
 
-                EnemyManager enemyManager = FindFirstObjectByType<EnemyManager>();
+                EnemyManager enemyManager = FindObjectOfType<EnemyManager>();
+
                 if (enemyManager != null)
                 {
                     StartCoroutine(FlyUpAndDestroy(enemyManager));

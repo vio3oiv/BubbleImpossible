@@ -11,9 +11,9 @@ public class Player : MonoBehaviour
     private bool isDead = false;
     private bool canShoot = true;
     private bool isInvulnerable = false;
-
     private Rigidbody2D rb;
     private Animator animator;
+    private Vector2 movement;
 
     [Header("공격 관련")]
     public Transform firePoint;
@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     public Image[] skillUIImages;          // 특수 스킬 UI (이미지 배열)
     public float skillInvulTime = 1f;      // 스킬 사용 시 무적 시간
     public Sprite usedSkillSprite; // 스킬 사용 후 변경될 이미지(아이콘)
+    public GameObject specialSkillEffectPrefab; // 스킬 사용 시 나타날 이펙트 프리팹
 
     void Start()
     {
@@ -163,6 +164,16 @@ public class Player : MonoBehaviour
 
         UpdateSkillUI(); // UI 업데이트
 
+        // 스킬 사용 시 이펙트 효과 재생 (플레이어 위치에서 효과를 나타냄)
+        if (specialSkillEffectPrefab != null)
+        {
+            Instantiate(specialSkillEffectPrefab, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogWarning("🚨 특수 스킬 이펙트 프리팹이 설정되지 않았습니다!");
+        }
+
         // 1초 무적
         StartCoroutine(InvulnerabilityRoutine(skillInvulTime));
 
@@ -201,10 +212,6 @@ public class Player : MonoBehaviour
 
     void UpdateSkillUI()
     {
-        // 예: maxSpecialSkillCount = 3
-        // skillUIImages[0], skillUIImages[1], skillUIImages[2] ...
-        // currentSkillCount는 현재 남은 스킬 사용 횟수
-
         for (int i = 0; i < skillUIImages.Length; i++)
         {
             // 모든 UI Image를 활성화(비활성화 안 함)

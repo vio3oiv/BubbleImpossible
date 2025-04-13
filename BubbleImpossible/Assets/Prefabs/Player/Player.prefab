@@ -845,6 +845,7 @@ GameObject:
   - component: {fileID: 516119924255818784}
   - component: {fileID: 2030024948651435694}
   - component: {fileID: 2841085654644515984}
+  - component: {fileID: 2511111413660931838}
   - component: {fileID: 6421283896984178677}
   m_Layer: 6
   m_Name: Player
@@ -980,6 +981,7 @@ MonoBehaviour:
   - {fileID: 2798645801484667571}
   skillInvulTime: 1
   usedSkillSprite: {fileID: 21300000, guid: 20c427ffb234b9b4eadc022f1821c00f, type: 3}
+  specialSkillEffectPrefab: {fileID: 8680598818964007281, guid: dcd90c4976197424b9958a7c54b6bb8c, type: 3}
 --- !u!50 &2030024948651435694
 Rigidbody2D:
   serializedVersion: 5
@@ -1021,6 +1023,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 6042492230782537992, guid: ac6ca5ae086bc3a4e8ad797426f06acb, type: 3}
   firePoint: {fileID: 6496227346482778828}
+--- !u!114 &2511111413660931838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942143280433939069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f7b69f5002d87419653716d299153e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveBounds: {fileID: 0}
 --- !u!61 &6421283896984178677
 BoxCollider2D:
   m_ObjectHideFlags: 0

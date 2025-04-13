@@ -83,6 +83,7 @@ public class Boss : MonoBehaviour
     /// </summary>
     IEnumerator FireRoutine()
     {
+        
         while (!isDying)
         {
             yield return new WaitForSeconds(fireRate);
@@ -96,6 +97,7 @@ public class Boss : MonoBehaviour
     /// </summary>
     void Fire()
     {
+        animator.SetTrigger("OnFire");
         if (bossBulletPrefabs == null || bossBulletPrefabs.Count == 0)
         {
             Debug.LogError("🚨 보스 불렛 프리팹 리스트가 비어 있습니다!");
@@ -199,6 +201,7 @@ public class Boss : MonoBehaviour
         {
             hp -= 1;
             Debug.Log($"🚨 보스 체력: {hp}");
+            animator.SetTrigger("OnAttack");
             // 보스 HP 슬라이더 UI 업데이트
             if (bossHPSlider != null)
             {

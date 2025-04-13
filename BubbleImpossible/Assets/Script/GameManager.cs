@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
     public GameObject gameClearUI; // 게임 클리어 UI 패널
 
     [Header("Stage Manager 연동")]
-    public StageManager stageManager; // StageManager에 배치된 스테이지 버튼 관리 스크립트
+    
+    //public StageManager stageManager; // StageManager에 배치된 스테이지 버튼 관리 스크립트
+
     public int totalStages = 5;       // 전체 스테이지 개수
 
     private int currentStageIndex = 0; // 현재 클리어된 스테이지 인덱스 (0부터 시작)
@@ -26,7 +28,6 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        
         else
         {
             Destroy(gameObject);
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StageCompleted()
     {
+        // StageManager 관련 코드 주석 처리
+        /*
         if (stageManager != null)
         {
             stageManager.StageClear(currentStageIndex);
@@ -57,6 +60,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("GameManager: StageManager가 할당되지 않았습니다!");
         }
+        */
 
         currentStageIndex++;
 
@@ -103,11 +107,13 @@ public class GameManager : MonoBehaviour
         {
             gameClearUI.SetActive(true);
         }
-        // StageManager에서 모든 스테이지 아이콘 업데이트 호출(필요시)
+        // StageManager 관련 코드 주석 처리
+        /*
         if (stageManager != null)
         {
             stageManager.UpdateAllStageIcons();
         }
+        */
     }
 
     private void ShowGameOverUI()
@@ -137,7 +143,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Debug.Log("💀 게임 재시작");
-        SaveDataManager.ClearSaveData(); // 저장된 데이터 초기화
+        //SaveDataManager.ClearSaveData(); // 저장된 데이터 초기화
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
