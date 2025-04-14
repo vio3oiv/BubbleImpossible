@@ -248,6 +248,7 @@ public class Boss : MonoBehaviour
         float duration = 1f;
         float timer = 0f;
 
+        // 보스가 위로 날아오르는 연출
         while (timer < duration)
         {
             transform.position += Vector3.up * flySpeed * Time.deltaTime;
@@ -255,18 +256,21 @@ public class Boss : MonoBehaviour
             yield return null;
         }
 
+        // 폭발 이펙트 생성 (설정되어 있을 경우)
         if (explosionPrefab != null)
         {
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         }
 
-        // 보스 사망 후 게임 클리어 UI 실행 (보스가 최종 보스라면)
-        else
+        
+        if (GameManager.instance != null)
         {
-            GameManager.instance.GameClear();
+            GameManager.instance.BossGameClear();
         }
 
         Destroy(gameObject);
     }
+
+
 
 }

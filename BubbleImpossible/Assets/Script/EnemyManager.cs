@@ -30,6 +30,7 @@ public class EnemyManager : MonoBehaviour
             {
                 patternManager.NextPattern();
             }
+
             else
             {
                 // 패턴이 모두 끝났다면 GameManager에서 게임 클리어 처리

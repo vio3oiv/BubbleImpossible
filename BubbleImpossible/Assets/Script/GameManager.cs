@@ -8,12 +8,12 @@ public class GameManager : MonoBehaviour
 
     [Header("UI Panels")]
     public GameObject gameOverUI;  // 게임 오버 UI 패널
-    public GameObject gameClearUI; // 게임 클리어 UI 패널
+    public GameObject gameClearUI; // 스테이지 클리어 UI 패널
 
-    [Header("Stage Manager 연동")]
-    
-    //public StageManager stageManager; // StageManager에 배치된 스테이지 버튼 관리 스크립트
+    [Header("Boss Game Clear UI")]
+    public GameObject bossGameClearUI; // 보스 게임 클리어 UI 패널
 
+    [Header("Stage Settings")]
     public int totalStages = 5;       // 전체 스테이지 개수
 
     private int currentStageIndex = 0; // 현재 클리어된 스테이지 인덱스 (0부터 시작)
@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     private bool isGameClear = false;
     // 외부에서 GameClear()가 호출될 때, 최초 1회에 한해 StageCompleted()를 실행할지 여부 플래그
     private bool stageCompletedOnGameClear = false;
+
+    // 보스 게임 클리어를 위한 상태 변수 (보스 객체가 하나이므로 별도로 관리)
+    private bool isBossGameClear = false;
 
     void Awake()
     {
@@ -36,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))  // C 키 눌러서 클리어 테스트
+        if (Input.GetKeyDown(KeyCode.C))  // C 키 눌러서 클리어 테스트 (스테이지 클리어)
         {
             Debug.Log("임시 StageClear 호출됨!");
             StageCompleted();  // 스테이지를 클리어했다고 가정
@@ -73,7 +76,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 게임 클리어 처리 메서드
+    /// 스테이지 클리어 처리 메서드
     /// 외부(예: 씬에서)로부터 GameClear()가 호출될 경우, 
     /// 현재 스테이지 진행 상태가 완료되지 않았다면 최초 1회에 한해 StageCompleted()를 실행하여 스테이지 UI 상태를 업데이트합니다.
     /// </summary>
@@ -114,6 +117,35 @@ public class GameManager : MonoBehaviour
             stageManager.UpdateAllStageIcons();
         }
         */
+    }
+
+    /// <summary>
+    /// 보스가 죽었을 때 호출됩니다.
+    /// 보스 객체는 하나이므로, 보스가 사망하면 항상 보스 게임 클리어 UI를 띄웁니다.
+    /// </summary>
+    public void BossGameClear()
+    {
+        if (isBossGameClear) return;
+
+        isBossGameClear = true;
+        Debug.Log("🎉 보스가 사망하여 보스 게임 클리어!");
+        // 1초 후 보스 게임 클리어 UI 표시
+        Invoke(nameof(OnBossGameClear), 1f);
+    }
+
+    void OnBossGameClear()
+    {
+        if (bossGameClearUI != null)
+        {
+            bossGameClearUI.SetActive(true);
+
+            Animator[] animators = gameOverUI.GetComponentsInChildren<Animator>();
+            foreach (Animator anim in animators)
+            {
+                // 시간 정지 상태에서도 애니메이션이 동작하도록 설정
+                anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+            }
+        }
     }
 
     private void ShowGameOverUI()

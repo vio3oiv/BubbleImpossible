@@ -5401,6 +5401,10 @@ PrefabInstance:
       propertyPath: gameClearUI
       value: 
       objectReference: {fileID: 122836, guid: f44c9b2b1bee07548ba74b34e036b350, type: 3}
+    - target: {fileID: 1385127173565944194, guid: a6c02806faee5814896a23e1e12acde3, type: 3}
+      propertyPath: bossGameClearUI
+      value: 
+      objectReference: {fileID: 122836, guid: f44c9b2b1bee07548ba74b34e036b350, type: 3}
     - target: {fileID: 8354680041246362517, guid: a6c02806faee5814896a23e1e12acde3, type: 3}
       propertyPath: m_Name
       value: GameManager
