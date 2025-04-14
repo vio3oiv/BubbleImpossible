@@ -16,14 +16,21 @@ public class Bullet : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb.freezeRotation = true;
         rb.linearVelocity = new Vector2(speed, 0f); // 오른쪽으로 이동
-
-        // 🟢 Update에서 직접 transform.position을 변경하지 않음 (Rigidbody2D 사용)
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (!hasHit && collision.CompareTag("Enemy"))
         {
+            // 충돌한 적의 Enemy 컴포넌트를 가져옵니다.
+            Enemy enemy = collision.GetComponent<Enemy>();
+            // 적이 존재하고 사망 중이면, 총알은 통과하도록 아무것도 하지 않음.
+            if (enemy != null && enemy.isDying)
+            {
+                return;
+            }
+
+            // 적이 아직 살아 있다면 처리
             hasHit = true;
             spriteRenderer.sprite = hitSprite; // 스프라이트 변경
             rb.linearVelocity = Vector2.zero; // 속도 정지

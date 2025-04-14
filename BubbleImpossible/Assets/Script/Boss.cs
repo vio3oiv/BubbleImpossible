@@ -247,16 +247,26 @@ public class Boss : MonoBehaviour
         float flySpeed = 2f;
         float duration = 1f;
         float timer = 0f;
+
         while (timer < duration)
         {
             transform.position += Vector3.up * flySpeed * Time.deltaTime;
             timer += Time.deltaTime;
             yield return null;
         }
+
         if (explosionPrefab != null)
         {
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         }
+
+        // 보스 사망 후 게임 클리어 UI 실행 (보스가 최종 보스라면)
+        else
+        {
+            GameManager.instance.GameClear();
+        }
+
         Destroy(gameObject);
     }
+
 }

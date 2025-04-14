@@ -145,21 +145,34 @@ public class Enemy : MonoBehaviour
         // 플레이어 탄과 충돌 → 적 HP 감소
         if (collision.CompareTag("Bullet"))
         {
-            hp -= 1;
-
-            if (hp <= 0 && !isDying)
+            if (!isDying)
             {
-                isDying = true;
-                animator.SetTrigger("OnDeath");
+                hp -= 1;
 
-                EnemyManager enemyManager = FindObjectOfType<EnemyManager>();
-
-                if (enemyManager != null)
+                if (hp <= 0)
                 {
-                    StartCoroutine(FlyUpAndDestroy(enemyManager));
+                    if (!isDying)
+                    {
+                        isDying = true;
+                        animator.SetTrigger("OnDeath");
+
+                        EnemyManager enemyManager = FindObjectOfType<EnemyManager>();
+
+                        if (enemyManager != null)
+                        {
+                            StartCoroutine(FlyUpAndDestroy(enemyManager));
+                        }
+                    }
                 }
+
+                // 적이 살아있을 때 총알 제거
+                Destroy(collision.gameObject);
             }
-            Destroy(collision.gameObject);
+            else
+            {
+                // 적이 사망 중인 경우 총알을 제거하지 않음 (즉, 통과하도록 함)
+                // 아무런 처리를 하지 않으면 총알은 그대로 남아 있게 됩니다.
+            }
         }
         // 플레이어와 충돌
         else if (collision.CompareTag("Player"))
@@ -180,7 +193,6 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-
 
 
     private IEnumerator FlyUpAndDestroy(EnemyManager enemyManager)

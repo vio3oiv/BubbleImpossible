@@ -968,7 +968,7 @@ MonoBehaviour:
   firePoint: {fileID: 6496227346482778828}
   bulletPrefab: {fileID: 6042492230782537992, guid: ac6ca5ae086bc3a4e8ad797426f06acb, type: 3}
   moveBounds: {fileID: 0}
-  shootCooldown: 0.5
+  shootCooldown: 0
   balloonObjects:
   - {fileID: 3784268119727188208}
   - {fileID: 1482510098324751307}
