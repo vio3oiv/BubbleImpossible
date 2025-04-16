@@ -18,8 +18,24 @@ MonoBehaviour:
   m_PlatformId: 84a3bb9e7420477f885e98145999eb20
   m_PlatformBuildProfile:
     rid: 1887947603187597313
-  m_OverrideGlobalSceneList: 0
-  m_Scenes: []
+  m_OverrideGlobalSceneList: 1
+  m_Scenes:
+  - m_enabled: 1
+    m_path: Assets/Scenes/Start.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Opening.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/StageMap.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Stage1.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Stage2.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Stage3.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Stage4.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Stage5.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings: []
