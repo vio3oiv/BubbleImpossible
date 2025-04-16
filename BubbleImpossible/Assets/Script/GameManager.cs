@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
         {
             bossGameClearUI.SetActive(true);
 
-            Animator[] animators = gameOverUI.GetComponentsInChildren<Animator>();
+            Animator[] animators = bossGameClearUI.GetComponentsInChildren<Animator>();
             foreach (Animator anim in animators)
             {
                 // 시간 정지 상태에서도 애니메이션이 동작하도록 설정
@@ -147,6 +147,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
 
     private void ShowGameOverUI()
     {

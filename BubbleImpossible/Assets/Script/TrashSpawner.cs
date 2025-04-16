@@ -10,6 +10,9 @@ public class TrashSpawner : MonoBehaviour
     // (선택사항) 스폰 위치에 추가할 오프셋
     public Vector3 spawnOffset = Vector3.zero;
 
+    // 떨어지는 속도를 제어하기 위한 변수
+    public float fallSpeed = 5f;           // 쓰레기가 떨어지는 속도 (단위: m/s)
+
     private void Start()
     {
         if (trashPrefabs == null || trashPrefabs.Length == 0)
@@ -45,7 +48,9 @@ public class TrashSpawner : MonoBehaviour
         Rigidbody rb = trash.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.useGravity = true;
+            // 중력 사용하지 않고 일정 속도로 떨어지도록 설정
+            rb.useGravity = false;
+            rb.linearVelocity = new Vector3(0, -fallSpeed, 0);
         }
     }
 }

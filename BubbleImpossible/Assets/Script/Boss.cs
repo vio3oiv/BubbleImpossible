@@ -196,9 +196,18 @@ public class Boss : MonoBehaviour
     /// </summary>
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // 플레이어 탄과 충돌 (태그 "BossBullet"를 사용)
+        // 보스 탄과 충돌 처리
         if (collision.CompareTag("BossBullet"))
         {
+            // BossSpecialBullet 컴포넌트가 있다면 변환 여부 확인
+            BossSpecialBullet specialBullet = collision.GetComponent<BossSpecialBullet>();
+            if (specialBullet != null && !specialBullet.IsTransformed)
+            {
+                // 변환되기 전이면 보스 HP에 영향을 주지 않음
+                return;
+            }
+
+            // 변환되었거나 BossSpecialBullet 스크립트가 없으면 보스 HP 차감
             hp -= 1;
             Debug.Log($"🚨 보스 체력: {hp}");
             animator.SetTrigger("OnAttack");
@@ -221,7 +230,7 @@ public class Boss : MonoBehaviour
             }
             Destroy(collision.gameObject);
         }
-        // 플레이어와 충돌 시
+        // 플레이어와의 충돌 처리
         else if (collision.CompareTag("Player"))
         {
             Player playerScript = collision.GetComponent<Player>();
@@ -238,6 +247,7 @@ public class Boss : MonoBehaviour
             }
         }
     }
+
 
     /// <summary>
     /// 보스가 사망 애니메이션 후 위로 날아오르며 파괴됩니다.

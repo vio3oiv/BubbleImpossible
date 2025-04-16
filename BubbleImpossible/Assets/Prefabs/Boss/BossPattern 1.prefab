@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 2342066057726030882}
   - component: {fileID: 8273983792538134126}
   - component: {fileID: 6535801540550084815}
-  - component: {fileID: 2609185034816941878}
+  - component: {fileID: 9204764583211780368}
   m_Layer: 0
-  m_Name: BossBullet 1
+  m_Name: BossPattern 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,9 +78,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 257967e5eb6632142ba920bd7c356b7e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_SortingOrder: 3
+  m_Sprite: {fileID: 21300000, guid: 84e9d0d9ee2db4e459a099e9190c33ea, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -105,7 +105,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -151,19 +151,19 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0066194534, y: 0.008136451}
+  m_Offset: {x: 0.0039000213, y: 0.017268896}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.05, y: 1.11}
+    oldSize: {x: 1.43, y: 1.82}
     newSize: {x: 2.77, y: 0.85}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.1190567, y: 1.1085366}
+  m_Size: {x: 1.489907, y: 1.9167507}
   m_EdgeRadius: 0
---- !u!114 &2609185034816941878
+--- !u!114 &9204764583211780368
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,8 +172,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6042492230782537992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db44c2b94649421791f51869c90dbd3, type: 3}
+  m_Script: {fileID: 11500000, guid: 167d465d4e2ff4accb6baeebfd7ab9a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
   damage: 1
+  fallSpeed: 9

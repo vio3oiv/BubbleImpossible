@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     [Header("플레이어 기본 스탯")]
     public int hp = 3;
+    private int maxHP;                 // 최대 HP (Start()에서 초기 hp로 설정)
     public float speed = 5f;
     private bool isDead = false;
     private bool canShoot = true;
@@ -33,6 +34,11 @@ public class Player : MonoBehaviour
     public Sprite usedSkillSprite; // 스킬 사용 후 변경될 이미지(아이콘)
     public GameObject specialSkillEffectPrefab; // 스킬 사용 시 나타날 이펙트 프리팹
 
+    [Header("플레이어 HP UI 설정")]
+    public Image[] hpUIImages;         // 체력을 표시할 UI 이미지 배열
+    public Sprite fullHPSprite;        // 채워진 HP (예: 활성 하트)
+    public Sprite emptyHPSprite;       // 비어있는 HP (예: 비활성 하트)
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -44,6 +50,9 @@ public class Player : MonoBehaviour
         // 특수 스킬 횟수 초기화
         currentSkillCount = maxSpecialSkillCount;
         UpdateSkillUI();
+
+        maxHP = hp;
+        UpdateHPUI();
     }
 
     void Update()
@@ -71,6 +80,29 @@ public class Player : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (!isDead && moveBounds != null && rb != null)
+        {
+            Vector2 currentPos = rb.position;
+            Bounds bounds = moveBounds.bounds;
+
+            // 현재 위치가 영역 밖에 있는지 확인
+            bool isOutOfBounds = (currentPos.x < bounds.min.x || currentPos.x > bounds.max.x ||
+                                  currentPos.y < bounds.min.y || currentPos.y > bounds.max.y);
+
+            if (isOutOfBounds)
+            {
+                Vector2 clampedPosition = new Vector2(
+                    Mathf.Clamp(currentPos.x, bounds.min.x, bounds.max.x),
+                    Mathf.Clamp(currentPos.y, bounds.min.y, bounds.max.y)
+                );
+
+                rb.MovePosition(clampedPosition);
+            }
+        }
+    }
+
     void Shoot()
     {
         if (firePoint == null)
@@ -81,6 +113,8 @@ public class Player : MonoBehaviour
 
         animator.SetTrigger("shootTrigger");
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        // 공격 사운드 재생
+        SoundManager.instance?.PlaySound(SoundManager.SoundType.Shoot);
 
         Invoke(nameof(ResetToIdle), shootCooldown);
         canShoot = false;
@@ -108,8 +142,12 @@ public class Player : MonoBehaviour
         Debug.Log($"🚨 플레이어 HP: {hp}");
 
         PopBalloon(); // 풍선 제거 로직
+        // HP UI 업데이트 (체력 UI 이미지 갱신)
+        UpdateHPUI();
 
         StartCoroutine(InvulnerabilityRoutine(1f)); // 1초 무적
+                                                    
+        SoundManager.instance?.PlaySound(SoundManager.SoundType.Damage);
 
         if (hp > 0)
         {
@@ -174,6 +212,9 @@ public class Player : MonoBehaviour
             Debug.LogWarning("🚨 특수 스킬 이펙트 프리팹이 설정되지 않았습니다!");
         }
 
+        // 특수 스킬 사운드 재생
+        SoundManager.instance?.PlaySound(SoundManager.SoundType.SpecialSkill);
+
         // 1초 무적
         StartCoroutine(InvulnerabilityRoutine(skillInvulTime));
 
@@ -231,6 +272,28 @@ public class Player : MonoBehaviour
         }
     }
 
+     // ================================
+    // (3) HP UI 업데이트 로직
+    // ================================
+    void UpdateHPUI()
+    {
+        if (hpUIImages == null || hpUIImages.Length == 0)
+            return;
+
+        // 예시: hpUIImages 배열의 길이는 최대 HP와 같다고 가정
+        for (int i = 0; i < hpUIImages.Length; i++)
+        {
+            // i가 현재 hp 값보다 작으면 체력 있음 (full), 아니면 체력이 없는 상태 (empty)
+            if (i < hp)
+            {
+                hpUIImages[i].sprite = fullHPSprite;
+            }
+            else
+            {
+                hpUIImages[i].sprite = emptyHPSprite;
+            }
+        }
+    }
 
     // ================================
     // (3) 사망 로직
@@ -238,15 +301,14 @@ public class Player : MonoBehaviour
     IEnumerator Die()
     {
         Debug.Log("💀 플레이어 사망! 즉시 사망 애니메이션");
-
         yield return new WaitForSeconds(0.1f);
-
-        // 사망 후 아래로 떨어지는 연출
+        // 사망 사운드 재생
+        SoundManager.instance?.PlaySound(SoundManager.SoundType.Death);
         rb.gravityScale = 1f;
         rb.linearVelocity = new Vector2(0, -5f);
-
         GameManager.instance.GameOver();
     }
+
 
     // ================================
     // (4) 충돌 처리

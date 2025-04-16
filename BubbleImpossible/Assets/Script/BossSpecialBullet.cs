@@ -14,6 +14,9 @@ public class BossSpecialBullet : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
 
+    public bool IsTransformed { get { return isTransformed; } }
+
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -36,7 +39,14 @@ public class BossSpecialBullet : MonoBehaviour
     // 충돌 처리
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // (2) 플레이어의 불렛이 보스 스페셜 탄환에 맞은 경우
+        // 보스 컴포넌트를 직접 체크하여, 변환 전에는 보스에 영향을 주지 않도록 함
+        if (!isTransformed && collision.GetComponent<Boss>() != null)
+        {
+            // 아직 변환 전이면 보스와 충돌해도 아무런 처리를 하지 않음
+            return;
+        }
+
+        // (2) 플레이어의 불렛이 보스 스페셜 탄환에 맞은 경우 (아직 변환되지 않은 경우)
         if (!isTransformed && collision.CompareTag("Bullet"))
         {
             // 스프라이트를 변환하고 상태 플래그 업데이트
@@ -51,7 +61,7 @@ public class BossSpecialBullet : MonoBehaviour
             return;
         }
 
-        // (1) 플레이어와 충돌했을 때 (변환 전)
+        // (1) 플레이어와 충돌했을 때
         if (collision.CompareTag("Player"))
         {
             Player player = collision.GetComponent<Player>();
@@ -59,18 +69,15 @@ public class BossSpecialBullet : MonoBehaviour
             {
                 if (!isTransformed)
                 {
-                    // 변환 전: 플레이어 HP –1
+                    // 변환 전: 플레이어 HP –1 후 탄환 제거
                     player.TakeDamage(1);
                     Debug.Log("보스 스페셜 탄환이 플레이어에 맞아 HP가 감소했습니다.");
-                    // 원한다면 탄환 제거 (혹은 계속 남길 수도 있음)
                     Destroy(gameObject);
                 }
                 else
                 {
-                    // (2) 변환 후: 플레이어의 애니메이션 변경 및 탄환 방향 전환
-                    // (예시로 로그를 남기며 처리)
+                    // 변환 후: 플레이어 애니메이션 변경 및 탄환 방향 전환
                     Debug.Log("변환된 보스 스페셜 탄환이 플레이어에 맞았습니다. 플레이어 애니메이션 변경 및 탄환 방향 전환.");
-                    // 만약 Player 스크립트에 애니메이션 변경 함수가 있다면 호출할 수 있습니다.
                     player.ChangeAnimationOnHit();
 
                     // 탄환의 이동 방향을 오른쪽으로 전환
@@ -78,10 +85,11 @@ public class BossSpecialBullet : MonoBehaviour
                     rb.linearVelocity = direction * speed;
                 }
             }
+            return;
         }
 
         // (3) 변환된 탄환이 보스와 충돌했을 때
-        if (isTransformed && collision.CompareTag("Boss"))
+        if (isTransformed && collision.GetComponent<Boss>() != null)
         {
             Boss boss = collision.GetComponent<Boss>();
             if (boss != null)
@@ -90,6 +98,7 @@ public class BossSpecialBullet : MonoBehaviour
                 Debug.Log("변환된 보스 스페셜 탄환이 보스에 맞아 HP가 감소했습니다.");
             }
             Destroy(gameObject);
+            return;
         }
     }
 }
