@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Time.timeScale = 1f;  // 씬 전환 시 항상 시간을 풀어줌
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))  // C 키 눌러서 클리어 테스트 (스테이지 클리어)

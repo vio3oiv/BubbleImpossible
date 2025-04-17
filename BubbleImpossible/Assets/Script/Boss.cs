@@ -97,6 +97,7 @@ public class Boss : MonoBehaviour
     /// </summary>
     void Fire()
     {
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_BOSS_SHOOT);
         animator.SetTrigger("OnFire");
         if (bossBulletPrefabs == null || bossBulletPrefabs.Count == 0)
         {
@@ -180,6 +181,7 @@ public class Boss : MonoBehaviour
         // 시간이 다 되었을 때 (보스 타이머 종료)
         if (!isDying)
         {
+            SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_TIMER_END);
             Debug.Log("보스 타이머 종료: 시간이 다 되었습니다!");
             if (GameManager.instance != null)
             {
@@ -208,6 +210,7 @@ public class Boss : MonoBehaviour
             }
 
             // 변환되었거나 BossSpecialBullet 스크립트가 없으면 보스 HP 차감
+            SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_BOSS_HIT);
             hp -= 1;
             Debug.Log($"🚨 보스 체력: {hp}");
             animator.SetTrigger("OnAttack");
@@ -269,6 +272,7 @@ public class Boss : MonoBehaviour
         // 폭발 이펙트 생성 (설정되어 있을 경우)
         if (explosionPrefab != null)
         {
+            SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_EXPLOSION);
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         }
 

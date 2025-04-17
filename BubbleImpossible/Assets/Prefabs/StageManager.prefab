@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3705390926871604456}
-  - component: {fileID: 8522206312348061329}
+  - component: {fileID: 7391587160302409312}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8522206312348061329
+--- !u!114 &7391587160302409312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,13 +41,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3108743133792723044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 704a78b56137c4c959c13957e726cb59, type: 3}
+  m_Script: {fileID: 11500000, guid: bc34754c8d3df8144b942a0885a63afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageIcons:
-  - {fileID: 9183763128313316425, guid: 14f43da82efc041fb9d28747d0070599, type: 3}
-  - {fileID: 8530882218290668775, guid: afe595cef39e64f87b60c12d3d449b39, type: 3}
-  - {fileID: 5446158835389570527, guid: 8eaa93a0aaf8141548aa07e773bb4c62, type: 3}
-  - {fileID: 1050226070310596674, guid: 82055d9b0db91491d94cc711e30ec77a, type: 3}
-  - {fileID: 5141057004801633598, guid: 4432447eda2334664a1120611c8cbf0a, type: 3}
-  currentStageIndex: 5

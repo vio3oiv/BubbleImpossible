@@ -1495,7 +1495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116134184439716449, guid: d62ada3a9fd6f4e05be9b713a792ba6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: RestartScene
+      value: ReloadCurrentScene
       objectReference: {fileID: 0}
     - target: {fileID: 7116134184439716449, guid: d62ada3a9fd6f4e05be9b713a792ba6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -2299,7 +2299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116134184439716449, guid: 2281482ef70d3403aa116ae9ac0f3b2e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: LoadScene
+      value: LoadSceneByName
       objectReference: {fileID: 0}
     - target: {fileID: 7116134184439716449, guid: 2281482ef70d3403aa116ae9ac0f3b2e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName

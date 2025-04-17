@@ -1,10 +1,10 @@
-/*using UnityEngine;
+using UnityEngine;
 
 [System.Serializable]
 public class SaveDataContainer
 {
     public StageState[] stageStates; // 각 스테이지의 상태 배열
-    public int currentStageIndex;     // 현재 진행 중인 스테이지 인덱스
+    // public int currentStageIndex;     // 현재 진행 중인 스테이지 인덱스 (StageManager 관련 기능으로 주석 처리)
 }
 
 public static class SaveDataManager
@@ -27,7 +27,7 @@ public static class SaveDataManager
         {
             Data.stageStates[i] = StageState.Locked;
         }
-        Data.currentStageIndex = 0;
+        // Data.currentStageIndex = 0; // StageManager와 관련된 기능이라 주석 처리
         Save();
     }
 
@@ -43,4 +43,4 @@ public static class SaveDataManager
         PlayerPrefs.DeleteKey(SaveKey);
         Data = null;
     }
-}*/
+}

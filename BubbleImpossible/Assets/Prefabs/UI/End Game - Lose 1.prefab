@@ -701,7 +701,7 @@ PrefabInstance:
       objectReference: {fileID: 6960612914836197366, guid: 81a2fe3125a3574458a99069d409ea1a, type: 3}
     - target: {fileID: 4533056121092302351, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: LoadScene
+      value: LoadSceneByName
       objectReference: {fileID: 0}
     - target: {fileID: 4533056121092302351, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -946,14 +946,14 @@ PrefabInstance:
     - target: {fileID: 8471386669358434126, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1385127173565944194, guid: a6c02806faee5814896a23e1e12acde3, type: 3}
+      objectReference: {fileID: 6960612914836197366, guid: 81a2fe3125a3574458a99069d409ea1a, type: 3}
     - target: {fileID: 8471386669358434126, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: RestartGame
+      value: ReloadCurrentScene
       objectReference: {fileID: 0}
     - target: {fileID: 8471386669358434126, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: SceneController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8854175310577172619, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_UpdateMode

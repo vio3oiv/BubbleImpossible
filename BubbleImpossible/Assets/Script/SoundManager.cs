@@ -1,22 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
-    [Header("Audio Source")]
-    public AudioSource sfxSource;  // 사운드 효과를 재생할 AudioSource
+    // BGM 종류
+    public enum EBgm
+    {
+        BGM_TITLE,
+        BGM_GAME,
+    }
+
+    // SFX 종류
+    public enum ESfx
+    {
+        // 플레이어 관련
+        SFX_SHOOT,        // 0. 총알 발사
+        SFX_DAMAGE,       // 1. 데미지
+        SFX_DEATH,        // 2. 사망
+        SFX_SPECIALSKILL, // 3. 특수 스킬
+
+        //보스 관련
+        SFX_BOSS_SHOOT, // 4. 보스 공격
+        SFX_BOSS_HIT,   // 5. 보스 데미지
+        SFX_EXPLOSION,  // 6. 보스 죽음
+        SFX_TIMER_END,  // 7. 타임 오버
+    }
 
     [Header("Audio Clips")]
-    public AudioClip shootSound;
-    public AudioClip damageSound;
-    public AudioClip deathSound;
-    public AudioClip specialSkillSound;
+    [SerializeField] private AudioClip[] bgms;
+    [SerializeField] private AudioClip[] sfxs;
 
-    // SoundType 열거형: 각 상황에 따른 사운드를 구분합니다.
-    public enum SoundType { Shoot, Damage, Death, SpecialSkill };
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource audioBgm;
+    [SerializeField] private AudioSource audioSfx;
 
-    void Awake()
+    private void Awake()
     {
         // 싱글턴 패턴
         if (instance == null)
@@ -30,37 +51,26 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// SoundType에 따라 해당 AudioClip을 재생합니다.
-    /// </summary>
-    public void PlaySound(SoundType type)
+    /// <summary>지정한 BGM을 재생합니다.</summary>
+    public void PlayBGM(EBgm bgmIdx)
     {
-        if (sfxSource == null)
-        {
-            Debug.LogWarning("SoundManager: AudioSource가 할당되지 않았습니다!");
-            return;
-        }
+        if (audioBgm == null || bgms == null || (int)bgmIdx >= bgms.Length) return;
+        audioBgm.clip = bgms[(int)bgmIdx];
+        audioBgm.loop = true;
+        audioBgm.Play();
+    }
 
-        AudioClip clipToPlay = null;
-        switch (type)
-        {
-            case SoundType.Shoot:
-                clipToPlay = shootSound;
-                break;
-            case SoundType.Damage:
-                clipToPlay = damageSound;
-                break;
-            case SoundType.Death:
-                clipToPlay = deathSound;
-                break;
-            case SoundType.SpecialSkill:
-                clipToPlay = specialSkillSound;
-                break;
-        }
+    /// <summary>현재 재생 중인 BGM을 중지합니다.</summary>
+    public void StopBGM()
+    {
+        if (audioBgm == null) return;
+        audioBgm.Stop();
+    }
 
-        if (clipToPlay != null)
-        {
-            sfxSource.PlayOneShot(clipToPlay);
-        }
+    /// <summary>지정한 SFX를 한 번 재생합니다.</summary>
+    public void PlaySFX(ESfx sfxIdx)
+    {
+        if (audioSfx == null || sfxs == null || (int)sfxIdx >= sfxs.Length) return;
+        audioSfx.PlayOneShot(sfxs[(int)sfxIdx]);
     }
 }

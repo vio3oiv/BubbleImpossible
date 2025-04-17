@@ -114,7 +114,7 @@ public class Player : MonoBehaviour
         animator.SetTrigger("shootTrigger");
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         // 공격 사운드 재생
-        SoundManager.instance?.PlaySound(SoundManager.SoundType.Shoot);
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_SHOOT);
 
         Invoke(nameof(ResetToIdle), shootCooldown);
         canShoot = false;
@@ -146,8 +146,9 @@ public class Player : MonoBehaviour
         UpdateHPUI();
 
         StartCoroutine(InvulnerabilityRoutine(1f)); // 1초 무적
-                                                    
-        SoundManager.instance?.PlaySound(SoundManager.SoundType.Damage);
+
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_DAMAGE);
+
 
         if (hp > 0)
         {
@@ -213,7 +214,7 @@ public class Player : MonoBehaviour
         }
 
         // 특수 스킬 사운드 재생
-        SoundManager.instance?.PlaySound(SoundManager.SoundType.SpecialSkill);
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_SPECIALSKILL);
 
         // 1초 무적
         StartCoroutine(InvulnerabilityRoutine(skillInvulTime));
@@ -303,7 +304,7 @@ public class Player : MonoBehaviour
         Debug.Log("💀 플레이어 사망! 즉시 사망 애니메이션");
         yield return new WaitForSeconds(0.1f);
         // 사망 사운드 재생
-        SoundManager.instance?.PlaySound(SoundManager.SoundType.Death);
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_DAMAGE);
         rb.gravityScale = 1f;
         rb.linearVelocity = new Vector2(0, -5f);
         GameManager.instance.GameOver();
