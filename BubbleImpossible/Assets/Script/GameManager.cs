@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     void OnGameClear()
     {
+        Time.timeScale = 0f;
         if (gameClearUI != null)
         {
             gameClearUI.SetActive(true);
@@ -135,6 +136,7 @@ public class GameManager : MonoBehaviour
 
     void OnBossGameClear()
     {
+        Time.timeScale = 0f;
         if (bossGameClearUI != null)
         {
             bossGameClearUI.SetActive(true);
@@ -170,6 +172,7 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
 
         Debug.Log("💀 게임 종료! 1초 후 Game Over UI 표시");
+        Time.timeScale = 0f;
         Invoke(nameof(ShowGameOverUI), 1f);
     }
 

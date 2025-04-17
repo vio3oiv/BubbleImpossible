@@ -189,6 +189,7 @@ public class Enemy : MonoBehaviour
                 {
                     // 사망 애니메이션 중이라면 → 플레이어를 강제로 Idle 상태로 전환
                     player.ForceIdle();
+                    player.TakeDamage(0);
                 }
             }
         }
