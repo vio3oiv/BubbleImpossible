@@ -1376,6 +1376,10 @@ PrefabInstance:
       propertyPath: stageManager
       value: 
       objectReference: {fileID: 8522206312348061329, guid: 2cb28232f287e4d5eaccd048afb344fd, type: 3}
+    - target: {fileID: 1385127173565944194, guid: a6c02806faee5814896a23e1e12acde3, type: 3}
+      propertyPath: tutorialPanel
+      value: 
+      objectReference: {fileID: 272811057}
     - target: {fileID: 8354680041246362517, guid: a6c02806faee5814896a23e1e12acde3, type: 3}
       propertyPath: m_Name
       value: GameManager
