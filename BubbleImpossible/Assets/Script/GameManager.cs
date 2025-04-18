@@ -72,34 +72,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-        /// <summary>
-        /// 외부(예: 스테이지 클리어 조건 확인 로직)에서 호출하여 해당 스테이지가 클리어되었음을 알림.
-        /// StageManager의 상태 업데이트 및 다음 스테이지 버튼 개방 등이 처리됩니다.
-        /// 모든 스테이지 클리어 시 GameClear()를 호출합니다.
-        /// </summary>
-        public void StageCompleted()
-        {
-            // StageManager 관련 코드 주석 처리
-            /*
-            if (stageManager != null)
-            {
-                stageManager.StageClear(currentStageIndex);
-            }
-            else
-            {
-                Debug.LogWarning("GameManager: StageManager가 할당되지 않았습니다!");
-            }
-            */
 
-            currentStageIndex++;
-
-            // 모든 스테이지가 클리어되면 게임 클리어를 호출
-            if (currentStageIndex >= totalStages)
-            {
-                Debug.Log("모든 스테이지를 클리어했습니다.");
-                GameClear();
-            }
-        }
 
         /// <summary>
         /// 스테이지 클리어 처리 메서드
@@ -165,6 +138,7 @@ public class GameManager : MonoBehaviour
             GameClear();
         }
     }
+
 
 
     /// <summary>

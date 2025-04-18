@@ -4,43 +4,57 @@ using UnityEngine.SceneManagement;
 
 public class LevelMenu : MonoBehaviour
 {
-    public Button[] buttons;              // 레벨 버튼 배열
-    public GameObject levelButtons;       // 버튼들을 자식으로 가진 오브젝트
+    public GameObject[] buttons;            // 버튼 GameObject 배열
+    public GameObject[] lockIcons;          // 자물쇠 아이콘 GameObject 배열
+    public GameObject[] lockBlockers;       // 잠김 상태 클릭 방지 및 메시지 출력용 오버레이
+    public GameObject lockMessagePanel;
 
     private void Awake()
     {
-        ButtonsToArray(); // 자식 오브젝트에서 버튼 배열 구성
+        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
+        Debug.Log($"🔓 저장된 언락 스테이지: {unlockedLevel}");
 
-        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1); // 기본값 1 (스테이지 1만 언락됨)
-
-        // 모든 버튼 비활성화
         for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].interactable = false;
-        }
+            string btnName = buttons[i].name;
+            Button btn = buttons[i].GetComponent<Button>();
+            bool isUnlocked = i < unlockedLevel;
 
-        // 언락된 스테이지까지만 버튼 활성화
-        for (int i = 0; i < unlockedLevel && i < buttons.Length; i++)
-        {
-            buttons[i].interactable = true;
+            btn.interactable = isUnlocked;
+
+            if (lockIcons[i] != null)
+            {
+                lockIcons[i].SetActive(!isUnlocked);
+                Debug.Log($"🔒 [{btnName}] LockIcon {(isUnlocked ? "비활성화됨" : "활성화됨")}");
+            }
+
+            if (lockBlockers[i] != null)
+            {
+                lockBlockers[i].SetActive(!isUnlocked);
+                Debug.Log($"🛑 [{btnName}] LockBlocker {(isUnlocked ? "비활성화됨" : "활성화됨")}");
+
+                if (!isUnlocked)
+                {
+                    Button blockerBtn = lockBlockers[i].GetComponent<Button>();
+                    blockerBtn.onClick.RemoveAllListeners();
+                    blockerBtn.onClick.AddListener(() =>
+                    {
+                        Debug.Log($"❗ [{btnName}] 은/는 잠겨 있습니다.");
+                        ShowLockedMessage();
+                    });
+                }
+            }
+
+            Debug.Log($"▶️ [{btnName}] (index: {i}) → {(isUnlocked ? "언락됨" : "잠겨있음")}");
         }
     }
 
-    // 레벨 로드 함수 (levelId는 빌드 세팅에 등록된 인덱스 또는 씬 이름)
-    public void OpenLevel(int levelId)
+    void ShowLockedMessage()
     {
-        SceneManager.LoadScene(levelId);
-    }
-
-    // levelButtons의 자식들을 Button 배열로 변환
-    void ButtonsToArray()
-    {
-        int childCount = levelButtons.transform.childCount;
-        buttons = new Button[childCount];
-
-        for (int i = 0; i < childCount; i++)
-        {
-            buttons[i] = levelButtons.transform.GetChild(i).GetComponent<Button>();
-        }
+        Debug.Log("📢 잠김 메시지 패널 활성화됨");
+        if (lockMessagePanel != null)
+            lockMessagePanel.SetActive(true);
+        else
+            Debug.LogWarning("⚠️ lockMessagePanel이 설정되지 않았습니다!");
     }
 }

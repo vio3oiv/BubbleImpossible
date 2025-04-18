@@ -21,12 +21,6 @@ MonoBehaviour:
   m_OverrideGlobalSceneList: 1
   m_Scenes:
   - m_enabled: 1
-    m_path: Assets/Scenes/Start.unity
-  - m_enabled: 1
-    m_path: Assets/Scenes/Opening.unity
-  - m_enabled: 1
-    m_path: Assets/Scenes/StageMap.unity
-  - m_enabled: 1
     m_path: Assets/Scenes/Stage1.unity
   - m_enabled: 1
     m_path: Assets/Scenes/Stage2.unity
@@ -36,6 +30,12 @@ MonoBehaviour:
     m_path: Assets/Scenes/Stage4.unity
   - m_enabled: 1
     m_path: Assets/Scenes/Stage5.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Start.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Opening.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/StageMap.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings:
