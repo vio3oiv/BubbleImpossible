@@ -53,19 +53,7 @@
 ---
 
 ## 설치 및 실행 (Installation & Run)
-1. **Unity6** 설치  
-2. 프로젝트를 **Git**으로 클론한 뒤, `Assets/Scenes/` 폴더에서 메인 씬 등을 열기  
-3. **Play** 버튼 클릭 시 게임 실행  
-4. 빌드할 경우 `File > Build Settings`에서 **오프닝, 메인, 엔딩** 씬을 `Scenes In Build`에 추가 후 빌드
-
----
-
-## 향후 계획 (Roadmap)
-
-- **보스 Enemy** 추가 (패턴 기반 탄막, 체력 바, 분노 모드 등)  
-- **협력 플레이(코옵)** 모드 (2인 플레이)  
-- **아이템 시스템** (HP 회복 풍선, 스킬 충전, 탄 업그레이드 등)
-
+https://vio3oiv.github.io/BubbleImpossible/
 ---
 
 ## 기여 (Contributing)
