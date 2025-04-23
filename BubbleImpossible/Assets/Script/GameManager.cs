@@ -38,18 +38,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Time.timeScale = 1f;
     }
 
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))  // C 키 눌러서 클리어 테스트 (스테이지 클리어)
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.C))
         {
             Debug.Log("임시 StageClear 호출됨!");
-            StageCompleted();  // 스테이지를 클리어했다고 가정
+            StageCompleted();
         }
+#endif
+
         if (Time.timeScale == 0f)
         {
             // (2) 튜토리얼 중이라면 절대 재개하지 않음
@@ -72,67 +86,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GameClear()
+    {
+        if (isGameClear) return;
 
+        isGameClear = true;
+        Debug.Log("🎉 게임 클리어!");
+        Invoke(nameof(OnGameClear), 1f);
+    }
 
-        /// <summary>
-        /// 스테이지 클리어 처리 메서드
-        /// 외부(예: 씬에서)로부터 GameClear()가 호출될 경우, 
-        /// 현재 스테이지 진행 상태가 완료되지 않았다면 최초 1회에 한해 StageCompleted()를 실행하여 스테이지 UI 상태를 업데이트합니다.
-        /// </summary>
-        public void GameClear()
-        {
-            // 만약 외부에서 GameClear()가 호출되었는데 아직 모든 스테이지가 클리어되지 않았다면...
-            // (예: 디버깅이나 다른 조건에 의해 GameClear()가 직접 호출된 경우)
-            if (!stageCompletedOnGameClear && currentStageIndex < totalStages)
-            {
-                stageCompletedOnGameClear = true;
-                // 강제로 현재 스테이지를 마지막 스테이지 직전으로 설정한 후 StageCompleted() 실행
-                // StageCompleted()가 currentStageIndex를 증가시켜 총 스테이지 개수에 도달하도록 함
-                currentStageIndex = totalStages - 1;
-                StageCompleted();
-                return;  // StageCompleted()에서 GameClear()가 재호출되도록 함
-            }
-
-            // 게임 클리어가 이미 처리되었다면 재실행 방지
-            if (isGameClear)
-                return;
-
-            isGameClear = true;
-            Debug.Log("🎉 게임 클리어!");
-            // 1초 후 게임 클리어 UI 표시
-            Invoke(nameof(OnGameClear), 1f);
-        }
-
-        void OnGameClear()
+    void OnGameClear()
         {
             Time.timeScale = 1f;
             if (gameClearUI != null)
             {
                 gameClearUI.SetActive(true);
             }
-            // StageManager 관련 코드 주석 처리
-            /*
-            if (stageManager != null)
-            {
-                stageManager.UpdateAllStageIcons();
-            }
-            */
         }
 
     public void StageCompleted()
     {
-        currentStageIndex++;
+        int currentIndex = SceneManager.GetActiveScene().buildIndex;
 
-        // 🔓 다음 스테이지 언락 저장
         int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
-        if (unlockedLevel < currentStageIndex + 1)
+        if (unlockedLevel <= currentIndex)
         {
-            PlayerPrefs.SetInt("UnlockedLevel", currentStageIndex + 1);
+            PlayerPrefs.SetInt("UnlockedLevel", currentIndex + 1); // 다음 스테이지만 오픈
             PlayerPrefs.Save();
-            Debug.Log($"🔓 언락된 스테이지: {currentStageIndex + 1}");
+            Debug.Log($"🔓 언락된 스테이지: {currentIndex + 1}");
         }
 
-        if (currentStageIndex >= totalStages)
+        if (currentIndex + 1 >= totalStages)
         {
             Debug.Log("모든 스테이지를 클리어했습니다.");
             GameClear();
@@ -140,22 +124,22 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     /// <summary>
     /// 보스가 죽었을 때 호출됩니다.
     /// 보스 객체는 하나이므로, 보스가 사망하면 항상 보스 게임 클리어 UI를 띄웁니다.
     /// </summary>
     public void BossGameClear()
-        {
-            if (isBossGameClear) return;
+    {
+        if (isBossGameClear) return;
 
-            isBossGameClear = true;
-            Debug.Log("🎉 보스가 사망하여 보스 게임 클리어!");
-            // 1초 후 보스 게임 클리어 UI 표시
-            Invoke(nameof(OnBossGameClear), 1f);
-        }
+        isBossGameClear = true;
+        Debug.Log("🎉 보스가 사망하여 보스 게임 클리어!");
+        StageCompleted(); // ✅ 보스도 스테이지 클리어 처리
+        Invoke(nameof(OnBossGameClear), 1f);
+    }
 
-        void OnBossGameClear()
+
+    void OnBossGameClear()
         {
             Time.timeScale = 0f;
             if (bossGameClearUI != null)
