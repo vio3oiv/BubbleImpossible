@@ -90,10 +90,18 @@ public class GameManager : MonoBehaviour
     {
         if (isGameClear) return;
 
+        // 🔧 스테이지 완료 처리 추가
+        if (!stageCompletedOnGameClear)
+        {
+            stageCompletedOnGameClear = true;
+            StageCompleted();
+        }
+
         isGameClear = true;
         Debug.Log("🎉 게임 클리어!");
         Invoke(nameof(OnGameClear), 1f);
     }
+
 
     void OnGameClear()
         {
@@ -108,20 +116,27 @@ public class GameManager : MonoBehaviour
     {
         int currentIndex = SceneManager.GetActiveScene().buildIndex;
 
+        // 🧠 스테이지 번호는 인덱스가 아니라, 스테이지 1 = 번호 1
+        int stageNumber = currentIndex + 1;
+
         int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
-        if (unlockedLevel <= currentIndex)
+
+        int nextLevel = stageNumber + 1;
+
+        if (unlockedLevel < nextLevel)
         {
-            PlayerPrefs.SetInt("UnlockedLevel", currentIndex + 1); // 다음 스테이지만 오픈
+            PlayerPrefs.SetInt("UnlockedLevel", nextLevel);
             PlayerPrefs.Save();
-            Debug.Log($"🔓 언락된 스테이지: {currentIndex + 1}");
+            Debug.Log($"🔓 언락된 스테이지: {nextLevel}");
         }
 
-        if (currentIndex + 1 >= totalStages)
+        if (nextLevel > totalStages)
         {
             Debug.Log("모든 스테이지를 클리어했습니다.");
             GameClear();
         }
     }
+
 
 
     /// <summary>
